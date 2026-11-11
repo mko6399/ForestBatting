@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Forest Bathing Trail</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/jpeg" href="assets/images/webapp-icon.jpg">
+  <!-- Leaflet is served from our own origin so the map still works with no signal.
+       Its stylesheet comes in through styles.scss, so only the script is needed here. -->
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- iOS PWA Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Forest Bathing Trail">
+  <link rel="apple-touch-icon" href="assets/images/webapp-icon.jpg">
+  <link rel="apple-touch-icon" sizes="1024x1024" href="assets/images/webapp-icon.jpg">
+
+  <meta name="theme-color" content="#22c55e">
+</head>
+<body>
+  <app-root></app-root>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
+</body>
+</html>

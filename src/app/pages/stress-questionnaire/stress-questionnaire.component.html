@@ -1,0 +1,104 @@
+<main class="questionnaire-page">
+  <div class="page-glow page-glow-left" aria-hidden="true"></div>
+  <div class="page-glow page-glow-right" aria-hidden="true"></div>
+
+  <header class="questionnaire-header">
+    <a class="back-link" (click)="returnHome()" style="cursor:pointer">← <span>{{ copy().backHome }}</span></a>
+    <div class="header-tools">
+      <span class="eyebrow">{{ copy().eyebrow }}</span>
+      <div class="language-switcher" role="group" aria-label="Language">
+        <button type="button" [class.active]="language() === 'en'" (click)="setLanguage('en')" aria-label="English">EN</button>
+        <button type="button" [class.active]="language() === 'th'" (click)="setLanguage('th')" aria-label="ภาษาไทย">TH</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="questionnaire-card" *ngIf="!isComplete(); else results">
+    <div class="intro-row">
+      <div>
+        <p class="kicker">{{ activeKicker() }}</p>
+        <h1>{{ activeTitle() }}</h1>
+      </div>
+      <span class="question-count">{{ currentQuestion() + 1 }} / {{ questions().length }}</span>
+    </div>
+
+    <p class="intro-copy">{{ activeIntro() }}</p>
+
+    <div class="progress-track" aria-label="Questionnaire progress">
+      <div class="progress-value" [style.width.%]="progress()"></div>
+    </div>
+
+    <fieldset class="question-block">
+      <legend>{{ questions()[currentQuestion()].prompt }}</legend>
+      <div class="answer-list">
+        <label class="answer-option" *ngFor="let option of questions()[currentQuestion()].options; let index = index" [class.selected]="selectedAnswer() === index">
+          <input
+            type="radio"
+            name="stress-answer"
+            [value]="index"
+            [checked]="selectedAnswer() === index"
+            (change)="selectAnswer(index)" />
+          <span class="radio-mark" aria-hidden="true"></span>
+          <span>{{ option }}</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <footer class="question-actions">
+      <button type="button" class="button button-quiet" (click)="previous()" [disabled]="currentQuestion() === 0">{{ copy().back }}</button>
+      <button type="button" class="button button-primary" (click)="next()" [disabled]="selectedAnswer() === null">
+        {{ currentQuestion() === questions().length - 1 ? copy().seeResult : copy().next }}
+        <span aria-hidden="true">→</span>
+      </button>
+    </footer>
+  </section>
+
+  <ng-template #results>
+    <section class="questionnaire-card result-card">
+      <div class="result-mark" aria-hidden="true">✓</div>
+      <p class="kicker">{{ activeResultKicker() }}</p>
+      <h1>{{ result().label }}</h1>
+      <div class="stress-level" role="img" [attr.aria-label]="copy().stressLevel + ': ' + result().level + ' / 5'">
+        <div class="stress-level-heading">
+          <span>{{ copy().stressLevel }}</span>
+          <strong>{{ result().level }} / 5</strong>
+        </div>
+        <div class="stress-level-scale" aria-hidden="true">
+          <span *ngFor="let level of [1, 2, 3, 4, 5]" [class.active]="level <= result().level"></span>
+        </div>
+      </div>
+
+      <div class="compare-block" *ngIf="isAfter()">
+        <ng-container *ngIf="comparison() as compare; else noBaseline">
+          <p class="compare-title">{{ copy().compareTitle }}</p>
+          <div class="compare-grid">
+            <div class="compare-cell">
+              <span class="compare-label">{{ copy().beforeLabel }}</span>
+              <strong class="compare-value">{{ compare.beforeLevel }} / 5</strong>
+            </div>
+            <div class="compare-arrow" aria-hidden="true">→</div>
+            <div class="compare-cell compare-cell-after">
+              <span class="compare-label">{{ copy().afterLabel }}</span>
+              <strong class="compare-value">{{ compare.afterLevel }} / 5</strong>
+            </div>
+          </div>
+          <p class="compare-message" [class.improved]="compare.levelDiff < 0" [class.worse]="compare.levelDiff > 0">
+            {{ compareMessage(compare.levelDiff) }}
+          </p>
+        </ng-container>
+        <ng-template #noBaseline>
+          <p class="compare-message">{{ copy().compareMissing }}</p>
+        </ng-template>
+      </div>
+
+      <p class="result-copy">{{ result().description }}</p>
+      <p class="disclaimer">{{ copy().disclaimer }}</p>
+      <div class="result-actions">
+        <button type="button" class="button button-primary" (click)="restart()">{{ copy().restart }}</button>
+        <button type="button" class="button button-quiet" (click)="returnHome()">{{ copy().returnHome }}</button>
+      </div>
+    </section>
+  </ng-template>
+
+  <p class="page-note">{{ copy().pageNote }}</p>
+</main>

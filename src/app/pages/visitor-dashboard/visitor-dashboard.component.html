@@ -1,0 +1,78 @@
+<div class="dashboard">
+  <div class="card">
+    <!-- Admin login gate — shown until valid admin credentials are entered. -->
+    <ng-container *ngIf="!authenticated()">
+      <header class="header">
+        <h1>Admin Login</h1>
+      </header>
+
+      <form class="login-form" (ngSubmit)="login()">
+        <label>
+          Username
+          <input type="text" name="username" [(ngModel)]="username" autocomplete="username" required />
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" [(ngModel)]="password" autocomplete="current-password" required />
+        </label>
+
+        <div class="error" *ngIf="loginError()">
+          Invalid admin credentials.
+        </div>
+
+        <button type="submit" class="refresh-btn" [disabled]="loggingIn() || !username || !password">
+          {{ loggingIn() ? 'Signing in…' : 'Sign in' }}
+        </button>
+      </form>
+    </ng-container>
+
+    <!-- Dashboard content — only visible after admin login. -->
+    <ng-container *ngIf="authenticated()">
+      <header class="header">
+        <h1>Visitor Dashboard</h1>
+        <div class="header-actions">
+          <button type="button" class="refresh-btn" (click)="refresh()" [disabled]="loading()">
+            {{ loading() ? 'Loading…' : 'Refresh' }}
+          </button>
+          <button type="button" class="logout-btn" (click)="logout()">Log out</button>
+        </div>
+      </header>
+
+      <div class="error" *ngIf="error()">
+        Failed to load visitor stats. Please try again.
+      </div>
+
+      <ng-container *ngIf="stats() as s">
+        <div class="total">
+          <span class="total-number">{{ s.totalVisitors }}</span>
+          <span class="total-label">Total visitors</span>
+        </div>
+
+        <div class="table-wrapper" *ngIf="s.visitors.length > 0">
+          <table class="visitor-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Email</th>
+                <th>First visit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let v of s.visitors; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ v.firstName }}</td>
+                <td>{{ v.lastName }}</td>
+                <td>{{ v.email }}</td>
+                <td>{{ v.createdAt | date:'medium' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="empty" *ngIf="s.visitors.length === 0">No visitors recorded yet.</p>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+INSTRUCTIONS FOR ROUTE OVERLAY IMAGE
+=====================================
+
+1. Save your Strava route screenshot as a PNG image with transparent background
+   - Crop just the route path (orange line) from the image
+   - Remove the background to make it transparent
+   - Keep only the orange route line
+
+2. Name the file: route-overlay.png
+
+3. Place it in this directory: src/assets/images/
+
+4. The map will automatically overlay this image and stretch it to fit the checkpoint bounds
+
+Alternative: If you want to use the current procedural route generation instead,
+comment out line 777 in map.component.ts:
+    // this.addRouteImageOverlay();
+
+And uncomment:
+    this.drawRouteBetweenCheckpoints();

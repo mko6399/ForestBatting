@@ -1,0 +1,101 @@
+<section class="home-trail" aria-label="Forest Bathing Trail home">
+  <div class="trail-card" *ngIf="!isLoading(); else loading">
+    <p class="error" *ngIf="loadError()">{{ loadError() }}</p>
+
+    <div class="trail-map" aria-label="Trail infographic">
+      <img
+        class="trail-poster"
+        [src]="posterSrc()"
+        alt="Forest Bathing Trail poster"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+
+    <div class="start-area">
+      <p class="stop-warning" *ngIf="isTracking()" role="note">{{ t().home.stopWarning }}</p>
+      <button
+        class="start-btn"
+        type="button"
+        (click)="isTracking() ? stopTracking() : startTracking()"
+        [disabled]="!isTracking() && loadError()"
+        [attr.aria-label]="isTracking() ? t().home.stop : t().home.goToStart"
+        [class.stop]="isTracking()"
+      >
+        {{ isTracking() ? t().home.stop : t().home.goToStart }}
+      </button>
+
+      <p class="visitor-count" *ngIf="visitorCount() !== null" role="status">
+        👥 {{ visitorCount() }} visitors
+      </p>
+
+      <!-- <button
+        class="test-email-btn"
+        type="button"
+        (click)="testCertificateEmail()"
+        [disabled]="testEmailStatus() === 'sending'"
+      >
+        {{ testEmailStatus() === 'sending' ? 'Sending…' : 'Test certificate email' }}
+      </button>
+      <p class="test-email-status" *ngIf="testEmailStatus() === 'sent' || testEmailStatus() === 'failed'" role="status">
+        {{ testEmailStatus() === 'sent' ? 'Test email sent ✓' : 'Test email failed ✗' }}
+      </p> -->
+    </div>
+
+    <div class="evaluation-overlay" *ngIf="showPostUseEvaluation()">
+      <section class="evaluation-modal" role="dialog" aria-modal="true" [attr.aria-label]="t().common.postUseEvaluationTitle">
+        <h2>{{ t().common.postUseEvaluationTitle }}</h2>
+        <p>{{ t().common.postUseEvaluationDescription }}</p>
+        <p class="email-status" [class.sent]="emailStatus() === 'sent'" [class.failed]="emailStatus() === 'failed'" role="status">
+          {{ emailStatus() === 'sending' ? t().common.emailSending
+            : emailStatus() === 'sent' ? t().common.emailSent
+            : emailStatus() === 'failed' ? t().common.emailFailed : '' }}
+        </p>
+        <button type="button" class="evaluation-link" (click)="openStressQuestionnaire()">
+          {{ t().common.openStressQuestionnaire }}
+        </button>
+        <button type="button" class="evaluation-continue" (click)="continueAfterEvaluation()">
+          {{ t().common.continueToApp }}
+        </button>
+      </section>
+    </div>
+
+    <div class="tutorial-prompt-overlay" *ngIf="showTutorialPrompt()">
+      <div class="tutorial-dialog tutorial-help-dialog">
+        <h3>{{ t().home.tutorialTitle }}</h3>
+
+        <div class="tutorial-content">
+          <p class="tutorial-intro">{{ t().home.tutorialDescription }}</p>
+
+          <div class="help-button-demo-container">
+            <p class="help-button-explanation">{{ t().home.tutorialHelpButtonDescription }}</p>
+            <div class="help-button-demo" aria-hidden="true">?</div>
+          </div>
+
+          <p class="help-button-usage">{{ t().home.tutorialHelpButtonUsage }}</p>
+        </div>
+
+        <div class="tutorial-actions">
+          <button type="button" class="tutorial-btn primary" (click)="startTutorialJourney()">{{ t().home.tutorialStart }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="trail-footer">
+      <div class="logos" aria-hidden="true">
+        <img class="logo" src="/assets/images/Garden-logo.png" alt="Khao Chong Botanical Garden" />
+        <img class="logo" src="/assets/images/Kachonghills-logo.png" alt="Kachong Hills Resort" />
+      </div>
+
+      <div class="progress">
+        {{ completedCount() }}/{{ totalCount() }} checkpoints
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="trail-card">
+      <p class="loading">{{ t().common.loading }}</p>
+    </div>
+  </ng-template>
+</section>

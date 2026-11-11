@@ -1,0 +1,41 @@
+<div class="language-selector-overlay">
+  <div class="language-selector-modal">
+    <div class="modal-header">
+      <h2>Welcome to Forest Bathing Trail</h2>
+      <p class="subtitle">ยินดีต้อนรับสู่เส้นทางการอาบป่า</p>
+      <p class="subtitle">Please select a language</p>
+      <p class="subtitle">กรุณาเลือกภาษา</p>
+    </div>
+
+    <div class="modal-body">
+      <div class="languages-grid">
+        <button
+          *ngFor="let language of languages"
+          class="language-option"
+          [class.selected]="isSelected(language)"
+          (click)="selectLanguage(language)"
+          [attr.aria-pressed]="isSelected(language)"
+          [attr.aria-label]="'Select ' + language.name"
+        >
+          <span class="flag">{{ language.flag }}</span>
+          <div class="language-info">
+            <span class="native-name">{{ language.nativeName }}</span>
+            <span class="english-name">{{ language.name }}</span>
+          </div>
+          <span class="check-icon" *ngIf="isSelected(language)">✓</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        class="confirm-btn"
+        [disabled]="!selectedLanguage"
+        (click)="confirmSelection()"
+        [class.disabled]="!selectedLanguage"
+      >
+        Continue / ดำเนินการต่อ
+      </button>
+    </div>
+  </div>
+</div>

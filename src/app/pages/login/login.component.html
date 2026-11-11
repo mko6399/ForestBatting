@@ -1,0 +1,98 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>{{ t.login.title }}</h1>
+      <p>{{ t.login.subtitle }}</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="login-form" *ngIf="!codeSent">
+      <div class="form-group" [class.field-error]="isFieldEmpty('name')">
+        <label for="name">{{ t.login.name }}</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          [(ngModel)]="name"
+          [placeholder]="t.login.namePlaceholder"
+          required
+          autocomplete="given-name"
+        />
+        <small class="error-text" *ngIf="isFieldEmpty('name')">{{ t.login.name }} is required</small>
+      </div>
+
+      <div class="form-group" [class.field-error]="isFieldEmpty('surname')">
+        <label for="surname">{{ t.login.surname }}</label>
+        <input
+          type="text"
+          id="surname"
+          name="surname"
+          [(ngModel)]="surname"
+          [placeholder]="t.login.surnamePlaceholder"
+          required
+          autocomplete="family-name"
+        />
+        <small class="error-text" *ngIf="isFieldEmpty('surname')">{{ t.login.surname }} is required</small>
+      </div>
+
+      <div class="form-group" [class.field-error]="isFieldEmpty('email')">
+        <label for="email">{{ t.login.email }}</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          [placeholder]="t.login.emailPlaceholder"
+          required
+          autocomplete="email"
+        />
+        <small class="error-text" *ngIf="isFieldEmpty('email')">{{ t.login.email }} is required</small>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" class="login-button" [disabled]="isSendingCode">
+        <span *ngIf="!isSendingCode">{{ t.login.sendCodeButton }}</span>
+        <span *ngIf="isSendingCode">Loading...</span>
+      </button>
+    </form>
+
+    <form (ngSubmit)="onVerifyCode()" class="login-form" *ngIf="codeSent">
+      <div class="info-message" *ngIf="infoMessage">
+        {{ infoMessage }}
+      </div>
+
+      <div class="form-group" [class.field-error]="codeSubmittedOnce && codeErrorMessage">
+        <label for="code">{{ t.login.codeLabel }}</label>
+        <input
+          type="text"
+          id="code"
+          name="code"
+          inputmode="numeric"
+          maxlength="6"
+          [(ngModel)]="code"
+          [placeholder]="t.login.codePlaceholder"
+          required
+          autocomplete="one-time-code"
+        />
+        <small class="error-text" *ngIf="codeSubmittedOnce && codeErrorMessage">{{ codeErrorMessage }}</small>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" class="login-button" [disabled]="isVerifying">
+        <span *ngIf="!isVerifying">{{ t.login.loginButton }}</span>
+        <span *ngIf="isVerifying">Loading...</span>
+      </button>
+
+      <button type="button" class="resend-button" [disabled]="isSendingCode" (click)="resendCode()">
+        <span *ngIf="!isSendingCode">{{ t.login.resendCode }}</span>
+        <span *ngIf="isSendingCode">Loading...</span>
+      </button>
+    </form>
+  </div>
+</div>
+

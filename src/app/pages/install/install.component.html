@@ -1,0 +1,65 @@
+<section class="install" aria-label="Install app">
+  <div class="card">
+    <h1>Install Forest Bathing Trail</h1>
+
+    <p class="subtitle">
+      This page is meant to be opened via a special link.
+    </p>
+
+    <div class="meta" *ngIf="autostart()">
+      <div class="chip">autostart</div>
+    </div>
+
+    <div class="status" [attr.data-state]="status()">
+      <p class="status-title">
+        <ng-container [ngSwitch]="status()">
+          <span *ngSwitchCase="'ready'">Ready to install</span>
+          <span *ngSwitchCase="'installing'">Installing…</span>
+          <span *ngSwitchCase="'installed'">Installed</span>
+          <span *ngSwitchCase="'dismissed'">Not installed</span>
+          <span *ngSwitchCase="'unavailable'">Install not available</span>
+          <span *ngSwitchDefault>Checking…</span>
+        </ng-container>
+      </p>
+
+      <p class="status-details" *ngIf="details()">{{ details() }}</p>
+
+      <button
+        class="install-btn"
+        type="button"
+        (click)="install()"
+        [disabled]="!canInstall()"
+      >
+        Install
+      </button>
+
+      <p class="hint" *ngIf="autostart() && status() !== 'installed'">
+        Tip: tap anywhere once to trigger the install prompt.
+      </p>
+
+      <div class="help" *ngIf="status() === 'unavailable'">
+        <h2>Manual install instructions</h2>
+        <ul>
+          <li>
+            <strong>iPhone/iPad (Safari):</strong><br/>
+            1. Tap the Share button (box with arrow)<br/>
+            2. Scroll down and tap "Add to Home Screen"<br/>
+            3. Tap "Add" to confirm
+          </li>
+          <li>
+            <strong>Android (Chrome):</strong><br/>
+            1. Tap the menu button (⋮)<br/>
+            2. Select "Install app" or "Add to Home screen"<br/>
+            3. Tap "Install" to confirm
+          </li>
+          <li>
+            <strong>Other browsers:</strong><br/>
+            Look for an "Install" option in the menu, or try opening in Chrome/Safari
+          </li>
+        </ul>
+        <p><strong>Note:</strong> Make sure you're opening this page directly in your browser, not through a link in another app (Instagram, Facebook, etc.)</p>
+      </div>
+    </div>
+
+  </div>
+</section>

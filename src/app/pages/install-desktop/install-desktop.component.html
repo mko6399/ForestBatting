@@ -1,0 +1,121 @@
+<section class="install" aria-label="Install app">
+  <div class="card">
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button
+        type="button"
+        class="lang-btn"
+        [class.active]="lang() === 'en'"
+        (click)="setLang('en')"
+      >🇬🇧 EN</button>
+      <button
+        type="button"
+        class="lang-btn"
+        [class.active]="lang() === 'th'"
+        (click)="setLang('th')"
+      >🇹🇭 TH</button>
+    </div>
+
+    <h1>{{ tr().heading }}</h1>
+
+    <p class="subtitle">{{ tr().subtitle }}</p>
+
+    <div class="status" [attr.data-state]="status()">
+      <p class="status-title">
+        <span *ngIf="isPreparing()" class="spinner" aria-hidden="true"></span>{{ statusTitle() }}
+      </p>
+
+      <p class="status-details" *ngIf="details()">{{ details() }}</p>
+
+      <pre class="debug" *ngIf="debugText()">{{ debugText() }}</pre>
+
+      <!-- Safari: no install API, so this button reveals a guided prompt. -->
+      <ng-container *ngIf="isSafari() && !isStandalone(); else chromiumInstall">
+        <button
+          class="install-btn"
+          type="button"
+          [attr.aria-expanded]="safariGuideOpen()"
+          (click)="toggleSafariGuide()"
+        >
+          {{ isIOS() ? tr().addToHomeScreenButton : tr().addToDockButton }}
+        </button>
+
+        <div class="safari-guide" *ngIf="safariGuideOpen()">
+          <ol *ngIf="isIOS(); else macSafariGuide">
+            <li>
+              {{ tr().iosGuideStep1Pre }}
+              <span class="share-glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>
+                </svg>
+              </span>
+              {{ tr().iosGuideStep1Post }}
+            </li>
+            <li>{{ tr().iosGuideStep2 }}</li>
+            <li>{{ tr().iosGuideStep3 }}</li>
+          </ol>
+          <ng-template #macSafariGuide>
+            <ol>
+              <li>{{ tr().macGuideStep1 }}</li>
+              <li>{{ tr().macGuideStep2 }}</li>
+              <li>{{ tr().macGuideStep3 }}</li>
+            </ol>
+            <p class="safari-note">{{ tr().macGuideNote }}</p>
+          </ng-template>
+        </div>
+      </ng-container>
+
+      <ng-template #chromiumInstall>
+        <button
+          class="install-btn"
+          type="button"
+          (click)="install()"
+          [disabled]="!canInstall()"
+        >
+          {{ isPreparing() ? tr().gettingReadyButton : tr().installButton }}
+        </button>
+
+        <button
+          class="reload-btn"
+          type="button"
+          *ngIf="status() === 'unavailable' && isChromium()"
+          (click)="reload()"
+        >
+          {{ tr().reloadButton }}
+        </button>
+      </ng-template>
+    </div>
+
+    <div class="help">
+      <h2>{{ tr().manualTitle }}</h2>
+
+      <ul>
+        <li>
+          <strong>{{ tr().manualIosLabel }}</strong><br/>
+          {{ tr().manualIosBody }}
+        </li>
+        <li>
+          <strong>{{ tr().manualAndroidLabel }}</strong><br/>
+          {{ tr().manualAndroidBody }}
+        </li>
+        <li>
+          <strong>{{ tr().manualChromeLabel }}</strong><br/>
+          {{ tr().manualChromeBody }}
+        </li>
+        <li>
+          <strong>{{ tr().manualEdgeLabel }}</strong><br/>
+          {{ tr().manualEdgeBody }}
+        </li>
+        <li>
+          <strong>{{ tr().manualSafariLabel }}</strong><br/>
+          {{ tr().manualSafariBody }}
+        </li>
+        <li>
+          <strong>{{ tr().manualFirefoxLabel }}</strong><br/>
+          {{ tr().manualFirefoxBody }}
+        </li>
+      </ul>
+
+      <p class="note">{{ tr().note }}</p>
+    </div>
+  </div>
+</section>

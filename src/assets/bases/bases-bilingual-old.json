@@ -1,0 +1,456 @@
+[
+  {
+    "id": 1,
+    "name": {
+      "th": "ทางเข้า Lobby กะช่องฮิลล์ รีสอร์ท",
+      "en": "Kachong Hills Resort Lobby Entrance"
+    },
+    "latitude": 7.008803,
+    "longitude": 100.501978,
+    "radius": 7,
+    "type": "question_forest_bathing",
+    "activities": {
+      "th": [
+        "1.1 เขียนความไม่สบายใจที่สุดสั้นๆ 1 เรื่อง",
+        "1.2 เขียนความกังวลใจที่สุดสั้นๆ 1 เรื่อง",
+        "1.3 เขียนความทุกข์ใจที่สุดสั้นๆ 1 เรื่อง"
+      ],
+      "en": [
+        "1.1 Write down the most uncomfortable feeling briefly",
+        "1.2 Write down the most worrying feeling briefly",
+        "1.3 Write down the most distressing feeling briefly"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "name": {
+      "th": "ต้นสาละอินเดีย",
+      "en": "Indian Almond Tree"
+    },
+    "latitude": 7.009568,
+    "longitude": 100.502124,
+    "type": "activity_forest_bathing_photo",
+    "activities": {
+      "th": [
+        "2.1 เปิดกล้อง ส่องดูลวดลายใบไม้สด",
+        "2.2 เปิดกล้อง ส่องดูลวดลายเปลือกไม้",
+        "2.3 เปิดกล้อง ส่องดูลวดลายไม้แห้ง"
+      ],
+      "en": [
+        "2.1 open camera and observe the patterns of fresh leaves",
+        "2.2 open camera and observe the patterns of bark",
+        "2.3 open camera and observe the patterns of dry wood"
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "name": {
+      "th": "ป้ายยินดีต้อนรับสู่สวนพฤกษศาสตร์เขาช่อง",
+      "en": "Welcome Sign to Khao Chong Botanical Garden"
+    },
+    "latitude": 7.010367,
+    "longitude": 100.502596,
+    "type": "question_botany",
+    "activities": {
+      "th": [
+        "3.1 มองสีเขียวในป่า มองต้นไม้ที่อยู่ต่ำกว่าระดับสายตา 30 วินาที",
+        "3.2 มองสีเขียวในป่า มองต้นไม้ที่อยู่ระดับสายตา 30 วินาที",
+        "3.3 มองสีเขียวในป่า มองต้นไม้ที่อยู่สูงกว่าระดับสายตา 30 วินาที"
+      ],
+      "en": [
+        "3.1 watch the green in the forest, look at trees below eye level for 30 seconds",
+        "3.2 watch the green in the forest, look at trees at eye level for 30 seconds",
+        "3.3 watch the green in the forest, look at trees above eye level for 30 seconds"
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "name": {
+      "th": "ต้นรวงผึ้ง",
+      "en": "Bee's Nest Tree"
+    },
+    "latitude": 7.010787,
+    "longitude": 100.503111,
+    "type": "question_botany",
+    "activities": {
+      "th": [
+        "4.1 ถอดรองเท้าเหยียบพื้นดิน อย่างน้อย 20 วินาที",
+        "4.2 ถอดรองเท้าเหยียบใบไม้แห้ง อย่างน้อย 20 วินาที",
+        "4.3 ถอดรองเท้าเหยียบหญ้า อย่างน้อย 20 วินาที"
+      ],
+      "en": [
+        "4.1 Take off your shoes and step on the ground for at least 20 seconds",
+        "4.2 Take off your shoes and step on dry leaves for at least 20 seconds",
+        "4.3 Take off your shoes and step on grass for at least 20 seconds"
+      ]
+    }
+  },
+  {
+    "id": 5,
+    "name": {
+      "th": "ประวัติสวนพฤกษศาสตร์เขาช่อง",
+      "en": "History of Khao Chong Botanical Garden"
+    },
+    "latitude": 7.011144,
+    "longitude": 100.503782,
+    "type": "question_botany",
+    "activities": {
+      "th": [
+        "5.1 อ่านประวัติความเป็นมาของสวนพฤกษศาสตร์เขาช่อง",
+        "5.2 มองไปรอบๆ หายใจเข้า-ออกลึก ๆ เป็นเวลาอย่างน้อย 20 วินาที",
+        "5.3 เอามือแตะต้นไม้ หลับตา และฟังเสียงรอบตัว"
+      ],
+      "en": [
+        "5.1 Read the history of Khao Chong Botanical Garden",
+        "5.2 Look around and take deep breaths for at least 20 seconds",
+        "5.3 Touch the tree, close your eyes, and listen to the sounds around you"
+      ]
+    }
+  },
+  {
+    "id": 6,
+    "name": {
+      "th": "รากไทร",
+      "en": "Stilted Root Tree"
+    },
+    "latitude": 7.011479,
+    "longitude": 100.504399,
+    "type": "question_botany",
+    "activities": {
+      "th": [
+        "6.1 นั่งในจุดที่แสงแดดส่องผ่านใบไม้ อย่างน้อย 20 วินาที",
+        "6.2 ยืนในจุดที่แสงแดดส่องผ่านใบไม้ อย่างน้อย 20 วินาที",
+        "6.3 เดินในจุดที่แสงแดดส่องผ่านใบไม้ อย่างน้อย 20 วินาที"
+      ],
+      "en": [
+        "6.1 Sit in a spot where sunlight filters through the leaves for at least 20 seconds",
+        "6.2 Stand in a spot where sunlight filters through the leaves for at least 20 seconds",
+        "6.3 Walk in a spot where sunlight filters through the leaves for at least 20 seconds"
+      ]
+    }
+  },
+  {
+    "id": 7,
+    "name": {
+      "th": "ลูกชิด",
+      "en": "Fern and Moss"
+    },
+    "latitude": 7.011612,
+    "longitude": 100.505032,
+    "type": "question_botany",
+    "activities": {
+      "th": [
+        "7.1 เปล่งเสียงเบาๆ ให้คล้ายเสียงแมลงในป่า",
+        "7.2 เปล่งเสียงเบาๆ ร้องเพลงที่ชอบ",
+        "7.3 เปล่งเสียงเบาๆ ร้องเพลงที่ฟังล่าสุด"
+      ],
+      "en": [
+        "7.1 Make a soft sound like an insect in the forest",
+        "7.2 Make a soft sound, sing your favorite song",
+        "7.3 Make a soft sound, sing the song you listened to last"
+      ]
+    }
+  },
+  {
+    "id": 8,
+    "name": {
+      "th": "บนเนิน",
+      "en": "On the Hillside"
+    },
+    "latitude": 7.011096,
+    "longitude": 100.505257,
+    "type": "activity_forest_bathing",
+    "randomizeActivities": true,
+    "activities": {
+      "th": [
+        "8.1 ยืนสงบนิ่งหลับตา สังเกตว่า ลมสัมผัสส่วนใด อย่างน้อย 10 วินาที",
+        "8.2 หายใจเข้า–ออกลึก ๆ หลับตา รับพลังงานจากต้นไม้และอากาศบริสุทธิ์ อย่างน้อย 10 วินาที",
+        "8.3 หลับตา ตั้งใจฟังเสียงนก เสียงลม เสียงแมลง อย่างน้อย 10 วินาที"
+      ],
+      "en": [
+        "8.1 Stand still with eyes closed, observe which parts of your body the wind touches for at least 10 seconds",
+        "8.2 Breathe in and out deeply with eyes closed, receive energy from the trees and fresh air for at least 10 seconds",
+        "8.3 Close your eyes, focus on listening to the sounds of birds, wind, and insects for at least 10 seconds"
+      ]
+    }
+  },
+  {
+    "id": 9,
+    "name": {
+      "th": "วงศ์ยาง",
+      "en": "Rubber Tree Family"
+    },
+    "latitude": 7.009786,
+    "longitude": 100.505627,
+    "type": "question_botany",
+    "questions": [
+      {
+        "id": "9.1",
+        "question": {
+          "th": "ต้นยางพาราอยู่ในวงศ์ใด?",
+          "en": "Which family does the rubber tree belong to?"
+        },
+        "choices": {
+          "ก": { "th": "วงศ์ยาง", "en": "Rubber family" },
+          "ข": { "th": "วงศ์ปาล์ม", "en": "Palm family" }
+        },
+        "correctAnswer": "ก"
+      },
+      {
+        "id": "9.2",
+        "question": {
+          "th": "น้ำยางได้มาจากส่วนใดของต้นยาง?",
+          "en": "Which part of the rubber tree produces latex?"
+        },
+        "choices": {
+          "ก": { "th": "เปลือกต้น", "en": "Tree bark" },
+          "ข": { "th": "ราก", "en": "Roots" }
+        },
+        "correctAnswer": "ก"
+      },
+      {
+        "id": "9.3",
+        "question": {
+          "th": "ประโยชน์สำคัญของต้นยางพาราคืออะไร?",
+          "en": "What is the main benefit of the rubber tree?"
+        },
+        "choices": {
+          "ก": { "th": "ผลิตน้ำยาง", "en": "Produce latex" },
+          "ข": { "th": "ให้ผลไม้", "en": "Produce fruit" }
+        },
+        "correctAnswer": "ก"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": {
+      "th": "ศาลาแปดเหลี่ยม (ตำหนักโปร่งฤทัย)",
+      "en": "Octagonal Pavilion (Tamnak Prong Rithai)"
+    },
+    "latitude": 7.009099,
+    "longitude": 100.505654,
+    "type": "activity_forest_bathing",
+    "randomizeActivities": true,
+    "activities": {
+      "th": [
+        "หายใจลึก ๆ ฟังเสียง เสียงสัตว์ เสียงน้ำตก อย่างน้อย 10 วินาที",
+        "นั่งสมาธิในศาลา หรือยืนสงบนิ่ง ฟังเสียงสัตว์ เสียงน้ำตก อย่างน้อย 10 วินาที",
+        "อ่านประวัติของศาลาแปดเหลี่ยม(ตำหนักโปร่งฤทัย) ฟังเสียงน้ำตก อย่างน้อย 10 วินาที"
+      ],
+      "en": [
+        "10.1 Breathe deeply and listen to the sounds of animals and waterfalls for at least 10 seconds",
+        "10.2 Meditate in the pavilion or stand still, listening to the sounds of animals and waterfalls for at least 10 seconds",
+        "10.3 Read the history of the Octagonal Pavilion (Tamnak Prong Rithai) while listening to the sounds of waterfalls for at least 10 seconds"
+      ]
+    }
+  },
+  {
+    "id": 11,
+    "name": {
+      "th": "น้ำตกโตนน้อย",
+      "en": "Ton Noi Waterfall"
+    },
+    "latitude": 7.008445,
+    "longitude": 100.50538,
+    "type": "activity_forest_bathing_photo",
+    "randomizeActivities": true,
+    "activities": {
+      "th": [
+        "11.1 ล้างมือด้วยน้ำลำธารธรรมชาติ หายใจลึก ๆ และถ่ายรูปกับน้ำตกโตนน้อย",
+        "11.2 ล้างมือด้วยน้ำลำธารธรรมชาติ ฟังเสียงน้ำตก และถ่ายรูปกับน้ำตกโตนน้อย",
+        "11.3 ล้างมือด้วยน้ำลำธารธรรมชาติ ฟังเสียงนก เสียงแมลง และถ่ายรูปกับน้ำตกโตนน้อย"
+      ],
+      "en": [
+        "11.1 Wash your hands with natural stream water, breathe deeply, and take a photo with Ton Noi Waterfall",
+        "11.2 Wash your hands with natural stream water, listen to the waterfall, and take a photo with Ton Noi Waterfall",
+        "11.3 Wash your hands with natural stream water, listen to the sounds of birds and insects, and take a photo with Ton Noi Waterfall"
+      ]
+    }
+  },
+  {
+    "id": 12,
+    "name": {
+      "th": "สะพานเหล็ก",
+      "en": "Iron Bridge"
+    },
+    "latitude": 7.008045,
+    "longitude": 100.504951,
+    "type": "question_botany",
+    "activities": {
+      "th": [
+        "12.1 มองไปทางต้นน้ำของลำธาร อย่างน้อย 10 วินาที",
+        "12.2 มองไปทางปลายน้ำของลำธาร อย่างน้อย 10 วินาที",
+        "12.3 มองดูการไหลของน้ำในลำธาร อย่างน้อย 10 วินาที"
+      ],
+      "en": [
+        "12.1 Look upstream of the stream for at least 10 seconds",
+        "12.2 Look downstream of the stream for at least 10 seconds",
+        "12.3 Observe the flow of water in the stream for at least 10 seconds"
+      ]
+    }
+  },
+  {
+    "id": 13,
+    "name": {
+      "th": "จุดชมวิว 2",
+      "en": "Viewpoint 2"
+    },
+    "latitude": 7.008082,
+    "longitude": 100.504404,
+    "type": "question_botany",
+    "activities": {
+      "th": [
+        "13.1 สัมผัสดิน ด้วยมือ และเท้า 30 วินาที",
+        "13.2 สัมผัสหญ้า ด้วยมือ 30 วินาที",
+        "13.3 สัมผัสใบไม้ที่ร่วง ด้วยมือ และเท้า 30 วินาที"
+      ],
+      "en": [
+        "13.1 Touch the soil with your hands and feet for 30 seconds",
+        "13.2 Touch the grass with your hands for 30 seconds",
+        "13.3 Touch the fallen leaves with your hands and feet for 30 seconds"
+      ]
+    }
+  },
+  {
+    "id": 14,
+    "name": {
+      "th": "หมุดดาวเทียม",
+      "en": "Satellite Marker"
+    },
+    "latitude": 7.008141,
+    "longitude": 100.503519,
+    "type": "question_botany",
+    "activities": {
+      "th": [
+        "14.1 แหงนมองการเคลื่อนไหวของใบไม้",
+        "14.2 แหงนมองการเคลื่อนไหวของก้อนเมฆ",
+        "14.3 แหงนมองการท้องฟ้า"
+      ],
+      "en": [
+        "14.1 Look up and observe the movement of the leaves",
+        "14.2 Look up and observe the movement of the clouds",
+        "14.3 Look up and observe the sky"
+      ]
+    }
+  },
+  {
+    "id": 15,
+    "name": {
+      "th": "ป้ายวงศ์ปาล์ม",
+      "en": "Palm Family Sign"
+    },
+    "latitude": 7.008157,
+    "longitude": 100.502848,
+    "type": "question_botany",
+    "questions": [
+      {
+        "id": "15.1",
+        "question": {
+          "th": "การขยายพันธุ์ปาล์มน้ำมันนิยมใช้วิธีใดมากที่สุด?",
+          "en": "What is the most common method for propagating oil palm?"
+        },
+        "choices": {
+          "ก": { "th": "เพาะเมล็ด", "en": "Seed propagation" },
+          "ข": { "th": "ตอนกิ่ง", "en": "Branch cutting" }
+        },
+        "correctAnswer": "ก"
+      },
+      {
+        "id": "15.2",
+        "question": {
+          "th": "การดัดแปลงพันธุกรรม (GMO) มีเป้าหมายหลักคืออะไร?",
+          "en": "What is the main goal of genetic modification (GMO)?"
+        },
+        "choices": {
+          "ก": { "th": "ปรับปรุงพันธุ์พืชให้มีคุณสมบัติที่ต้องการ เช่น ต้านทานโรค", "en": "Improve plant breeds to have desired traits, such as disease resistance" },
+          "ข": { "th": "ทำให้พืชมีสีสวยงามมากขึ้นเท่านั้น", "en": "Make plants more beautiful in color only" }
+        },
+        "correctAnswer": "ก"
+      },
+      {
+        "id": "15.3",
+        "question": {
+          "th": "พืชใบเลี้ยงเดี่ยวมีลักษณะเส้นใบอย่างไร?",
+          "en": "What are the characteristics of leaf veins in monocots?"
+        },
+        "choices": {
+          "ก": { "th": "เส้นใบเรียงขนาน", "en": "Parallel leaf veins" },
+          "ข": { "th": "เส้นใบแบบร่างแห", "en": "Reticulate leaf veins" }
+        },
+        "correctAnswer": "ก"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name": {
+      "th": "จุดชมวิว 1",
+      "en": "Viewpoint 1"
+    },
+    "latitude": 7.00821,
+    "longitude": 100.502231,
+    "type": "activity_forest_bathing_photo",
+    "randomizeActivities": true,
+    "activities": {
+      "th": [
+        "16.1 ถ่ายรูปขณะนั่งหรือยืน สูดอากาศ ในมุมที่เห็นแม่น้ำหรือภูเขาเป็นฉากหลัง",
+        "16.2 ถ่ายรูปกับต้นไม้ สงบใจ ยิ้มอย่างเป็นธรรมชาติ",
+        "16.3 ถ่ายรูปกางแขนรับลม ยิ้มอย่างเป็นธรรมชาติ ร้องเพลงเบา ๆ"
+      ],
+      "en": [
+        "16.1 Take a photo while sitting or standing, breathing deeply, with a view of the river or mountains in the background",
+        "16.2 Take a photo with a tree, calm your mind, and smile naturally",
+        "16.3 Take a photo while spreading your arms to feel the wind, smile naturally, and sing softly"
+      ]
+    }
+  },
+  {
+    "id": 17,
+    "name": {
+      "th": "ป้ายกะช่องฮิลล์ รีสอร์ท",
+      "en": "Kachong Hills Resort Sign"
+    },
+    "latitude": 7.008663,
+    "longitude": 100.502274,
+    "radius": 7,
+    "type": "activity_forest_bathing",
+    "activities": {
+      "th": [
+        "ยืนกับป้ายกะช่องฮิลล์ รีสอร์ท สูดลมเข้าปอด ยิ้มอย่างเป็นธรรมชาติ และกางแขนรับสิ่งดีๆ",
+        "ให้ดื่มเครื่องดื่มสมุนไพร สูดดมกลิ่นสมุนไพร",
+        "เขียนสรุปความรู้สึกและแบ่งปันไปยัง Social Media พร้อม Tag/ปักหมุดที่ กะช่องฮิลล์รีสอร์ท"
+      ],
+      "en": [
+        "Stand by the Kachong Hills Resort sign, inhale deeply, smile naturally, and spread your arms to embrace the good vibes",
+        "Drink herbal beverages and inhale the aroma of the herbs",
+        "Write a summary of your feelings and share your experience on Social Media with Tag/Pin at Kachong Hills Resort"
+      ]
+    },
+    "certificateFields": {
+      "th": [
+        "ชื่อ นามสกุล",
+        "ก้าว",
+        "เวลา",
+        "แคลอรี่",
+        "ออกซิเจน",
+        "ไพธอนไซด์",
+        "ดาวใฝ่รู้",
+        "Special Award"
+      ],
+      "en": [
+        "Name and Surname",
+        "Number of Steps",
+        "Time Duration",
+        "Calories Burned",
+        "Oxygen Amount",
+        "Phytoncide Amount",
+        "Knowledge Stars",
+        "Special Award"
+      ]
+    }
+  }
+]

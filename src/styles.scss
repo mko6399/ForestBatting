@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+@import "leaflet/dist/leaflet.css";
+@import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
+
+html, body {
+	overflow-x: hidden;
+	/* Without this the UA's default 8px body margin shows up as a stray gutter, and it
+	   throws off the certificate preview iframe, which is sized to an exact ratio. */
+	margin: 0;
+}
+
+.app-icon {
+	width: 1em;
+	height: 1em;
+	display: inline-block;
+	vertical-align: -0.125em;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.6;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.app-icon.spin {
+	animation: app-icon-spin 1s linear infinite;
+}
+
+@keyframes app-icon-spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Forest Bathing Trail",
+  "short_name": "Forest Bathing Trail",
+  "description": "Track your forest bathing checkpoints with location-based notifications",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "theme_color": "#22c55e",
+  "background_color": "#ffffff",
+  "categories": ["travel", "health"],
+  "screenshots": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "icons": [
+    {
+      "src": "assets/images/webapp-icon.jpg",
+      "sizes": "1024x1024",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

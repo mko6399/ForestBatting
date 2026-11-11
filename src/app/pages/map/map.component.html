@@ -1,0 +1,105 @@
+<div class="map-page">
+  <h1 class="map-title">
+    <svg class="app-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path d="M8 15s5-5.33 5-9A5 5 0 0 0 3 6c0 3.67 5 9 5 9Z" />
+      <path d="M8 8.25A2.25 2.25 0 1 0 8 3.75a2.25 2.25 0 0 0 0 4.5Z" />
+    </svg>
+    {{ t.map.title }}
+  </h1>
+  <div class="map-card">
+    <!-- Center map on the latest user location (manual only) -->
+    <button
+      class="center-me-btn"
+      (click)="centerOnMe()"
+      [disabled]="!userLatLng()"
+      [title]="t.map.centerOnMe">
+      📍 {{ t.map.centerOnMe }}
+    </button>
+    <!-- Toggle map tiles between street and satellite -->
+    <button
+      class="satellite-btn"
+      (click)="toggleSatellite()"
+      [title]="isSatellite() ? 'Switch to map view' : 'Switch to satellite view'">
+      {{ isSatellite() ? '🗺️ Map' : '🛰️ Satellite' }}
+    </button>
+    <!-- Path Drawing Tools -->
+    <div class="path-tools">
+      <!-- <button
+        class="new-path-btn"
+        (click)="startNewPath()"
+        [title]="'Start a new path'">
+        ➕ New Path
+      </button> -->
+
+      <!-- <button
+        class="draw-path-btn"
+        [class.drawing-active]="isDrawingMode()"
+        (click)="toggleDrawByHand()"
+        [title]="isDrawingMode() ? t.map.stopWalkToDraw : (customPath().length > 0 ? 'Continue drawing' : t.map.walkToDraw)">
+        {{ isDrawingMode() ? '⏹️ ' + t.map.stopWalkToDraw : (customPath().length > 0 ? '▶️ Continue drawing' : '✍️ ' + t.map.walkToDraw) }}
+      </button> -->
+
+      <button
+        *ngIf="customPath().length >= 2"
+        class="save-path-btn"
+        (click)="saveCustomPath()"
+        [title]="t.map.savePath">
+        💾 {{ t.map.savePath }}
+      </button>
+
+      <!-- <button
+        class="import-path-btn"
+        (click)="fileInput.click()"
+        [title]="t.map.importPath">
+        📁 {{ t.map.importPath }}
+      </button> -->
+      <input #fileInput type="file" accept=".json" (change)="importCustomPath($event)" hidden />
+
+      <button
+        *ngIf="customPath().length > 0"
+        class="clear-path-btn"
+        (click)="clearAndResetPath()"
+        [title]="t.map.clearPath">
+        🗑️ {{ t.map.clearPath }}
+      </button>
+    </div>
+
+    <!-- Loading indicator -->
+    <div id="map-loading" *ngIf="!isMapLoaded()" class="map-loading">
+      <svg class="app-icon spin" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M13 3v4H9" />
+        <path d="M13 7a5 5 0 1 0 1.2 3.2" />
+      </svg>
+      <p>{{ t.map.loadingMap }}</p>
+    </div>
+    <div id="map" class="map-container"></div>
+
+    <!-- Checkpoint Dialog Overlay with YouTube Player -->
+    <div *ngIf="showDialog()" class="dialog-overlay">
+      <div class="dialog">
+        <h2>ภารกิจ: {{ selectedCheckpoint()?.name }}</h2>
+        <hr>
+
+        <p class="mission-text">{{ selectedCheckpoint()?.mission }}</p>
+
+        <label>ตอบภารกิจ (Your Answer):</label>
+        <textarea rows="3" placeholder="ตอบภารกิจ..."></textarea>
+
+        <label class="mt">หลักฐาน (Photo Evidence):</label>
+        <div class="capture-row">
+          <button class="btn" type="button" (click)="cameraInput.click()">ถ่ายภาพ</button>
+          <input #cameraInput type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)" hidden />
+        </div>
+
+        <div *ngIf="selectedCheckpoint()?.photo" class="preview">
+          <img [src]="selectedCheckpoint()?.photo" alt="Mission Photo"/>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="btn" (click)="showDialog.set(false)">ปิด</button>
+          <button class="btn primary" (click)="completeMission()" [disabled]="!selectedCheckpoint()?.answer">เสร็จสิ้น</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
