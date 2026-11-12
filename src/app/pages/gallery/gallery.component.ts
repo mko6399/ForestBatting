@@ -78,7 +78,7 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
     :host {
       display: block;
       min-height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1f6b3a 0%, #14532d 100%);
     }
 
     .gallery-page {
@@ -104,7 +104,7 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
       align-items: center;
       gap: 8px;
       padding: 10px 16px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1f6b3a 0%, #14532d 100%);
       color: white;
       border: none;
       border-radius: 8px;
@@ -116,7 +116,7 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
 
     .back-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(31, 107, 58, 0.4);
     }
 
     .back-icon {
@@ -127,7 +127,7 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
       font-size: 28px;
       font-weight: 800;
       margin: 0;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1f6b3a 0%, #14532d 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -177,13 +177,13 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
     .empty-state h2 {
       font-size: 24px;
       font-weight: 700;
-      color: #1e293b;
+      color: #13241a;
       margin: 0 0 12px;
     }
 
     .empty-state p {
       font-size: 16px;
-      color: #64748b;
+      color: #55695c;
       margin: 0;
     }
 
@@ -237,7 +237,7 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+      background: linear-gradient(135deg, rgba(31, 107, 58, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -322,7 +322,7 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
 
     .retry-btn {
       padding: 12px 24px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1f6b3a 0%, #14532d 100%);
       color: white;
       border: none;
       border-radius: 8px;
@@ -333,7 +333,7 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
 
     .retry-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(31, 107, 58, 0.4);
     }
 
     /* Modal Styles */
@@ -396,13 +396,13 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
 
     .modal-info {
       padding: 20px;
-      background: #f8fafc;
+      background: #f7f8f0;
     }
 
     .info-label {
       font-size: 12px;
       font-weight: 600;
-      color: #64748b;
+      color: #55695c;
       margin: 0 0 4px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -410,7 +410,7 @@ import { GalleryService, GalleryImage } from '../../services/gallery.service';
 
     .info-value {
       font-size: 16px;
-      color: #1e293b;
+      color: #13241a;
       margin: 0 0 16px;
       font-weight: 500;
     }

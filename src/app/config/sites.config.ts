@@ -65,7 +65,7 @@ export const SITES: readonly Site[] = [
       en: 'A forest bathing trail through the botanical garden, past waterfalls, the iron bridge and hilltop viewpoints.',
     },
     theme: { primary: '#15803d', surface: '#f0fdf4' },
-    image: 'assets/images/forest-bathing-trail-home-th.png',
+    image: 'assets/checkpoint_bg/waterfall.jpg',
     stats: { checkpoints: 17, distanceKm: 2.4, minutes: 90 },
     certificate: {
       organisationLine1: 'KACHONG HILLS',
@@ -89,8 +89,8 @@ export const SITES: readonly Site[] = [
       en: 'A canopy walkway trail through lowland rainforest.',
     },
     theme: { primary: '#0f766e', surface: '#f0fdfa' },
-    image: 'assets/images/forest-bathing-trail-home-en.png',
-    stats: { checkpoints: 12, distanceKm: 1.6, minutes: 60 },
+    image: 'assets/images/Thung Khai/487215545_654313030791459_3842419268756810567_n.jpg',
+    stats: { checkpoints: 24, distanceKm: 1.6, minutes: 60 },
     certificate: {
       organisationLine1: 'THUNG KHAI',
       organisationLine2: 'BOTANICAL GARDEN',
@@ -110,8 +110,8 @@ export const SITES: readonly Site[] = [
       en: 'An activity trail for families and children, built around play and discovery.',
     },
     theme: { primary: '#b45309', surface: '#fffbeb' },
-    image: 'assets/images/forest-bathing-trail-home-th.png',
-    stats: { checkpoints: 9, distanceKm: 1.1, minutes: 45 },
+    image: 'assets/images/forest of play/images.jpg',
+    stats: { checkpoints: 24, distanceKm: 1.1, minutes: 45 },
     certificate: {
       organisationLine1: 'FOREST OF PLAY',
       organisationLine2: 'TRANG',

@@ -162,6 +162,32 @@ QR ที่ทุ่งค่าย         →  /s/thungkhai       → เข�
 - เมนูข้าง + เมนูล่าง **ปิดปุ่ม ภารกิจ พร้อม tooltip** เมื่อยังไม่ถึง checkpoint
   (เดิมโชว์ปุ่มตลอดแล้วให้ guard เด้งกลับเฉย ๆ ซึ่งดูเหมือนแอปพัง)
 
+### 4.1c ระบบดีไซน์ "อาบป่า" (ทำแล้วบางส่วน)
+
+- [x] **design token กลางใน `src/styles.scss`** — ไม่ได้ไปแก้หน้าไหนเอง หน้าไหนจะใช้ค่อย opt-in
+  - สี: canopy / forest / moss / leaf / fern / mist / morning + bark, sunlight, dapple
+  - เงาแบบร่มไม้ (`--shadow-rest/lift/float`) ไม่ใช่ drop shadow แข็ง ๆ
+  - motion: `--ease-settle` (ค่อย ๆ นิ่ง ไม่เด้ง) + `--t-quick/base/slow/drift`
+  - keyframes ใช้ซ้ำได้: `forest-rise`, `forest-fade`, `forest-drift`, `forest-sway` + คลาส `.u-rise`
+  - focus ring ชัดทั่วเว็บ (สำคัญตอนใช้กลางแดด) + `prefers-reduced-motion` ปิดทุกอย่างทั้งก้อน
+- [x] **หน้า portal ออกแบบใหม่ทั้งหน้า**
+  - บรรยากาศแสงลอดใบไม้: radial-gradient 3 ก้อนลอยช้า ๆ **ไม่ใช้ `filter: blur()`**
+    (blur ที่ขยับทุกเฟรมทำให้เครื่องวาดใหม่ทั้งจอ ซึ่งแพงมากบนมือถือที่กำลังจับ GPS อยู่)
+  - เงาแนวต้นไม้ด้านล่างเป็น SVG path
+  - หัวเรื่อง + การ์ดทยอยปรากฏแบบ stagger · ใบไม้แต่ละใบแกว่งคนละจังหวะ
+  - ใช้แค่ transform/opacity เพื่อให้อยู่บน compositor
+- [x] **เปลี่ยนธีมทั้งแอปเป็น "อาบป่า" แล้ว (2026-11-12)**
+  - ฟอนต์: `Noto Sans Thai` (เนื้อหา) + `Prompt` (หัวข้อ/เมนู) จาก Google Fonts ใน `index.html`
+    cache ผ่าน `dataGroups.fonts` ใน `ngsw-config.json` (ใช้ออฟไลน์ได้หลังเปิดครั้งแรก)
+  - `components/forest-backdrop` — พื้นหลังป่าเคลื่อนไหวอยู่หลังทุกหน้า (ใส่ใน `app.component`)
+    ต้นไม้ 3 แถวโยกคนละจังหวะ, ลำแสง, หมอก, ใบไม้ร่วง, ละอองแสง — transform/opacity ล้วน,
+    ปิดหมดเมื่อ `prefers-reduced-motion`
+  - top bar + sidebar + bottom nav เป็นแผงสีเขียวป่าเข้ม, เมนู active = พื้นกระดาษ + แถบทอง
+  - สีม่วง/น้ำเงิน/เทาเดิมทั้งหมดใน `src/app` ถูก map เป็นพาเลตป่า (ยกเว้น `services/certificate-pdf`)
+  - redesign เต็ม: login, language picker, home (hero + วงแหวนความคืบหน้า), map, missions, portal
+  - portal ใช้รูปจริงของทุ่งค่าย / Forest of Play และตั้งจำนวนฐานเป็น 24 ทั้งสองที่
+  - ⚠️ budget style ของ `missions.component.ts` เหลือเผื่อแค่ไม่กี่ byte (12kB) ถ้าเพิ่ม style อีกควรย้ายไป scss แยก
+
 ### 4.2 Consent
 
 - [x] **`consent.service.ts`** — เก็บคำตอบ 2 เรื่องแยกกัน (`storage`, `location`)

@@ -1,8 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError, timeout } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { StorageService } from './storage.service';
+
+/**
+ * How long to wait for the auth endpoints before giving up.
+ *
+ * Generous, because the server really does send an email before it replies, and a slow
+ * mail provider is normal. Finite, because the alternative is a button stuck on "Loading..."
+ * until the user force-quits.
+ */
+const LOGIN_REQUEST_TIMEOUT_MS = 25_000;
 
 export interface LoginCodeRequest {
   firstName: string;
@@ -61,7 +70,15 @@ export class AuthService {
       return of({ message: 'Verification code sent (dev mode, check console)' });
     }
     const apiUrl = `${environment.apiUrl}/Auth/login`;
-    return this.http.post<LoginCodeResponse>(apiUrl, { firstName, lastName, email });
+    /*
+      The API sends the mail before it answers, and its SmtpClient has no timeout of its own —
+      .NET's default is 100 seconds. Without a cap here the login button simply says "Loading..."
+      for as long as that takes, with no way out. A timeout turns a hang into a message the
+      person can act on.
+    */
+    return this.http
+      .post<LoginCodeResponse>(apiUrl, { firstName, lastName, email })
+      .pipe(timeout(LOGIN_REQUEST_TIMEOUT_MS));
   }
 
   /**
@@ -83,7 +100,9 @@ export class AuthService {
       });
     }
     const apiUrl = `${environment.apiUrl}/Auth/verify`;
-    return this.http.post<VerifyCodeResponse>(apiUrl, { email, code });
+    return this.http
+      .post<VerifyCodeResponse>(apiUrl, { email, code })
+      .pipe(timeout(LOGIN_REQUEST_TIMEOUT_MS));
   }
 
   /**

@@ -12,10 +12,14 @@ import { StorageService } from '../../services/storage.service';
   template: `
     <aside class="sidebar" [class.open]="isOpen" [class.collapsed]="collapsed">
       <div class="brand">
-        <div class="logo">🌿</div>
-        <div class="name">Forest Bathing Trail</div>
+        <div class="logo" aria-hidden="true">🌿</div>
+        <div class="name">
+          <strong>Forest Bathing Trail</strong>
+          <small>{{ isTh() ? 'เส้นทางอาบป่า' : 'Forest bathing trail' }}</small>
+        </div>
         <button class="close" (click)="requestClose()" aria-label="Close menu">×</button>
       </div>
+      <p class="section-label">{{ isTh() ? 'เมนูหลัก' : 'Main menu' }}</p>
       <nav class="nav">
         <a routerLink="/home" routerLinkActive="active" (click)="requestClose()" [class.disabled]="certificateOnly">
           <span class="icon" aria-hidden="true">
@@ -66,6 +70,14 @@ import { StorageService } from '../../services/storage.service';
           <span class="alert-badge certificate-badge" *ngIf="isCertificateEnabled">!</span>
         </a>
       </nav>
+
+      <svg class="sidebar-forest" viewBox="0 0 272 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <path class="t" d="M30 120 L30 100 L10 100 L34 62 L18 62 L40 26 L62 62 L46 62 L70 100 L50 100 L50 120Z"/>
+        <path class="t" d="M110 120 L110 84 C80 84 72 54 96 44 C96 20 132 14 140 36 C166 34 172 70 146 80 L120 84 L120 120Z"/>
+        <path class="t" d="M190 120 L190 96 L168 96 L196 50 L180 50 L204 8 L228 50 L212 50 L240 96 L218 96 L218 120Z"/>
+        <path class="t" d="M258 120 L258 92 C236 90 232 66 252 60 C254 40 282 38 286 58 L286 120Z"/>
+        <path d="M0 112 C60 104 120 116 180 108 C220 103 250 110 272 106 L272 120 L0 120Z"/>
+      </svg>
     </aside>
 
     <!-- Mobile bottom navigation (replaces sidebar on small screens) -->
@@ -112,7 +124,7 @@ import { StorageService } from '../../services/storage.service';
             <path d="M5 11h4" />
           </svg>
         </span>
-        <span class="label">{{ t().nav.certificate }}</span>
+        <span class="label">{{ isTh() ? 'เกียรติบัตร' : t().nav.certificate }}</span>
         <span class="alert-badge certificate-badge" *ngIf="isCertificateEnabled">!</span>
       </a>
     </nav>
@@ -121,149 +133,206 @@ import { StorageService } from '../../services/storage.service';
   `,
   styles: [`
     :host { display:block; }
+
+    /* ---- desktop sidebar: a dark canopy panel ------------------------- */
     .sidebar {
-      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
-      background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-      transform: translateX(-105%); transition: transform .25s ease;
-      z-index: 3000; border-right: 1px solid #edf2f7;
+      position: fixed; left: 0; top: 0; bottom: 0; width: 272px;
+      display: flex; flex-direction: column;
+      background: var(--g-canopy);
+      color: #f4f1e3;
+      box-shadow: 6px 0 28px rgba(10, 31, 20, .25);
+      transform: translateX(-105%); transition: transform var(--t-base) var(--ease-settle);
+      z-index: 3000;
+      overflow: hidden;
     }
     .sidebar.open { transform: translateX(0); }
-    @media (max-width: 767.98px) {
-      .sidebar { display:none; }
-    }
-    @media (min-width: 768px) {
-      .sidebar { transform: none; }
-    }
-    .brand { display:flex; align-items:center; gap:10px; padding:16px 18px; border-bottom:1px solid #f1f5f9; }
-    .brand .logo { width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:#e6f4ea; border-radius:10px; font-size:18px; }
-    .brand .name { font-weight:700; color:#1f2937; }
-    .brand .close { margin-left:auto; border:none; background:transparent; font-size:24px; line-height:1; display:inline-block; cursor:pointer; color:#64748b; }
-    @media (min-width: 768px) { .brand .close { display:none; } }
-    .nav { display:flex; flex-direction:column; padding:10px; }
-  .nav a { display:flex; align-items:center; gap:10px; padding:10px 12px; margin:4px 6px; color:#334155; text-decoration:none; border-radius:10px; transition: background .2s, color .2s; }
-    .nav a:hover { background:#f8fafc; }
-    .nav a.active { background:#e6f4ea; color:#166534; font-weight:600; }
-    .nav .icon { width:22px; text-align:center; }
-    .nav a.disabled { pointer-events:none; opacity:.5; }
-    .mission-link { position: relative; }
-    .certificate-link { position: relative; }
+    @media (max-width: 767.98px) { .sidebar { display:none; } }
+    @media (min-width: 768px) { .sidebar { transform: none; } }
 
-    /* Mobile bottom nav */
+    .brand {
+      display:flex; align-items:center; gap:12px;
+      height: 64px; box-sizing: border-box; flex: none;
+      padding: 0 18px;
+      border-bottom: 2px solid rgba(232, 179, 60, .55);
+      background: rgba(0, 0, 0, .18);
+    }
+    .brand .logo {
+      width:40px; height:40px; flex:none;
+      display:grid; place-items:center;
+      background: var(--g-sun); border-radius:12px; font-size:20px;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,.12);
+    }
+    .brand .name { display:flex; flex-direction:column; min-width:0; }
+    .brand .name strong { font-family: var(--f-head); font-weight:600; font-size:16px; color:#fffdf3; line-height:1.2; }
+    .brand .name small { font-size:12px; color: var(--c-sprout); line-height:1.3; }
+    .brand .close { margin-left:auto; border:none; background:transparent; font-size:26px; line-height:1; cursor:pointer; color:#f4f1e3; }
+    @media (min-width: 768px) { .brand .close { display:none; } }
+
+    .section-label {
+      margin: 22px 26px 8px;
+      font-family: var(--f-head);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(244, 241, 227, .6);
+    }
+
+    .nav { display:flex; flex-direction:column; padding: 0 12px; }
+    .nav a {
+      position: relative;
+      display:flex; align-items:center; gap:14px;
+      min-height: 52px; box-sizing: border-box;
+      padding: 8px 14px; margin: 3px 0;
+      font-family: var(--f-head); font-size: 16px; font-weight: 500;
+      color: #f4f1e3; text-decoration:none;
+      border-radius: 14px;
+      transition: background var(--t-quick) ease, color var(--t-quick) ease, transform var(--t-quick) ease;
+    }
+    .nav a:hover { background: rgba(255,255,255,.09); transform: translateX(2px); }
+    .nav .icon {
+      width: 36px; height: 36px; flex: none;
+      display:grid; place-items:center;
+      border-radius: 10px;
+      background: rgba(255,255,255,.08);
+      color: var(--c-sprout);
+      transition: background var(--t-quick) ease, color var(--t-quick) ease;
+    }
+    .nav .icon .bi { width: 20px; height: 20px; }
+    .nav a.active {
+      background: var(--c-paper);
+      color: var(--c-forest);
+      font-weight: 600;
+      box-shadow: 0 6px 16px rgba(0,0,0,.22);
+    }
+    .nav a.active::before {
+      content: "";
+      position: absolute; left: -12px; top: 10px; bottom: 10px;
+      width: 5px; border-radius: 0 4px 4px 0;
+      background: var(--c-sun);
+    }
+    .nav a.active .icon { background: var(--g-leaf); color: #fff; }
+    .nav a.disabled { pointer-events:none; opacity:.42; }
+    .mission-link, .certificate-link { position: relative; }
+
+    /* A row of trees at the foot of the panel, gently swaying. */
+    .sidebar-forest {
+      margin-top: auto;
+      height: 120px;
+      width: 100%;
+      flex: none;
+      display: block;
+      fill: rgba(143, 209, 122, .16);
+    }
+    .sidebar-forest .t {
+      transform-box: fill-box; transform-origin: 50% 100%;
+      animation: forest-sway 7s ease-in-out infinite;
+    }
+    .sidebar-forest .t:nth-child(2) { animation-duration: 9s; animation-delay: -2s; fill: rgba(143, 209, 122, .24); }
+    .sidebar-forest .t:nth-child(3) { animation-duration: 8s; animation-delay: -4s; }
+    .sidebar-forest .t:nth-child(4) { animation-duration: 10s; animation-delay: -1s; fill: rgba(143, 209, 122, .22); }
+
+    /* ---- mobile bottom nav: floating canopy bar ------------------------ */
     .bottom-nav {
       position: fixed;
-      left: 0;
-      right: 0;
-      bottom: calc(env(safe-area-inset-bottom));
-      height: 64px;
-      padding: 8px 10px;
+      left: 8px;
+      right: 8px;
+      bottom: calc(8px + env(safe-area-inset-bottom));
+      height: 70px;
+      padding: 6px 8px;
+      box-sizing: border-box;
       display: grid;
-      grid-template-columns: auto 1px 1fr 1fr 1fr;
-      gap: 6px;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 4px;
       align-items: center;
-      background: #ffffff;
-      border-top: 1px solid #eef2f6;
+      background: var(--g-canopy);
+      border: 1px solid rgba(232, 179, 60, .4);
+      border-radius: 22px;
+      box-shadow: 0 10px 30px rgba(10, 31, 20, .35);
       z-index: 2500;
     }
-    .bottom-separator {
-      width: 1px;
-      height: 38px;
-      background: #eef2f6;
-      justify-self: center;
-    }
+    .bottom-separator { display: none; }
     .bottom-nav a {
       position: relative;
-      display: inline-flex;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 48px;
-      // padding: 6px 8px;
+      height: 58px;
       text-decoration: none;
-      color: #64748b;
-      border-radius: 12px;
-      transition: background .2s, color .2s;
+      color: rgba(244, 241, 227, .8);
+      border-radius: 16px;
+      transition: color var(--t-quick) ease;
       min-width: 0;
     }
     .icon-wrap {
-      width: 34px;
-      height: 34px;
+      width: 46px;
+      height: 30px;
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: transparent;
-      transition: background .2s ease;
+      transition: background var(--t-base) var(--ease-settle), transform var(--t-base) var(--ease-settle);
     }
     .bi {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       display: block;
       fill: none;
       stroke: currentColor;
-      stroke-width: 1.6;
+      stroke-width: 1.7;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
     .bottom-nav a .label {
-      margin-top: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1.1;
+      margin-top: 3px;
+      font-family: var(--f-head);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100%;
     }
-    .bottom-nav a.active { color:#166534; }
-    .bottom-nav a.active .icon-wrap { background:#e6f4ea; }
-    .bottom-nav a.disabled { pointer-events:none; opacity:.5; }
-    .home-item { padding-inline: 12px; }
+    .bottom-nav a.active { color: #fffdf3; }
+    .bottom-nav a.active .label { font-weight: 600; color: var(--c-sunlight); }
+    .bottom-nav a.active .icon-wrap { background: var(--g-sun); color: #0f3d24; transform: translateY(-2px); }
+    .bottom-nav a.disabled { pointer-events:none; opacity:.4; }
     .mission-item, .certificate-item { position: relative; }
 
-    /* Badges on compact bottom-nav items */
     .bottom-nav .alert-badge {
-      top: 2px;
-      right: 10px;
+      top: 0;
+      right: calc(50% - 28px);
       width: 18px;
       height: 18px;
-      font-size: 12px;
+      font-size: 11px;
     }
 
-    /* Hide bottom nav on desktop */
-    @media (min-width: 768px) {
-      .bottom-nav { display:none; }
-    }
+    @media (min-width: 768px) { .bottom-nav { display:none; } }
+
     .alert-badge {
       position: absolute;
-      top: 6px;
+      top: 8px;
       right: 12px;
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      background: var(--c-danger);
       color: white;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 13px;
       width: 22px;
       height: 22px;
       border-radius: 50%;
+      border: 2px solid #0f3d24;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
-      animation: pulse-alert 1.5s ease-in-out infinite;
+      animation: pulse-alert 1.6s ease-in-out infinite;
     }
     @keyframes pulse-alert {
-      0%, 100% { transform: scale(1); box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4); }
-      50% { transform: scale(1.1); box-shadow: 0 4px 16px rgba(239, 68, 68, 0.6); }
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
     }
-    .certificate-badge {
-      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
-      animation: pulse-certificate 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse-certificate {
-      0%, 100% { transform: scale(1); box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4); }
-      50% { transform: scale(1.1); box-shadow: 0 4px 16px rgba(34, 197, 94, 0.6); }
-    }
-  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.35); z-index: 2900; }
+    .certificate-badge { background: var(--c-sun); color: #0f3d24; }
+
+    .overlay { position:fixed; inset:0; background:rgba(10,31,20,.5); z-index: 2900; }
     @media (min-width: 768px) { .overlay { display:none; } }
     @media (max-width: 767.98px) { .overlay { display:none; } }
     @media (min-width: 768px) {
@@ -292,6 +361,10 @@ export class SideNavComponent implements OnInit, OnDestroy {
   // Expose translations
   t() {
     return this.languageService.t();
+  }
+
+  isTh(): boolean {
+    return this.languageService.currentLanguage().code === 'th';
   }
 
   requestClose() { this.close.emit(); }

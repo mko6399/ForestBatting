@@ -65,22 +65,22 @@ import { StorageService } from '../../services/storage.service';
       padding: 18px;
       border-radius: 16px;
       background: #fff;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 -4px 28px rgba(15, 23, 42, .18);
+      border: 1px solid #dbe3d0;
+      box-shadow: 0 -4px 28px rgba(10, 31, 20, .18);
     }
 
     .consent-title {
       margin: 0 0 8px;
       font-size: 17px;
       font-weight: 800;
-      color: #0f172a;
+      color: #0a1f14;
     }
 
     .consent-text {
       margin: 0;
       font-size: 14px;
       line-height: 1.6;
-      color: #475569;
+      color: #3d5145;
     }
 
     .consent-list {
@@ -88,7 +88,7 @@ import { StorageService } from '../../services/storage.service';
       padding-inline-start: 20px;
       font-size: 13px;
       line-height: 1.65;
-      color: #475569;
+      color: #3d5145;
     }
 
     .consent-toggle {
@@ -126,7 +126,7 @@ import { StorageService } from '../../services/storage.service';
     }
 
     .btn-accept { background: #15803d; color: #fff; }
-    .btn-decline { background: #fff; color: #334155; border-color: #cbd5e1; }
+    .btn-decline { background: #fff; color: #2a3d31; border-color: #c6d3bf; }
 
     @media (min-width: 560px) {
       .consent-wrap { padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }

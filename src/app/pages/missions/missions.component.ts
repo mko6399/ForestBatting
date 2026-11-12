@@ -348,7 +348,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     :host {
       position: relative;
       display: block;
-      min-height: calc(100dvh - 56px);
+      min-height: calc(100dvh - 64px);
       background-image: url('/assets/checkpoint_bg/waterfall.jpg');
       background-size: cover;
       background-position: center;
@@ -359,7 +359,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(242, 245, 236, .84);
       pointer-events: none;
     }
 
@@ -425,9 +425,10 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      border-radius: 20px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--c-line);
+      box-shadow: var(--shadow-lift);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -437,7 +438,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     }
 
     .mission-card.completed {
-      border: 3px solid #22c55e;
+      border: 3px solid #3a9a52;
     }
 
     .card-header {
@@ -453,7 +454,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.28);
+      background: linear-gradient(#0a1f1426, #0a1f14b3);
       pointer-events: none;
     }
 
@@ -464,9 +465,10 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
 
     .checkpoint-name {
       margin: 8px 0 0;
-      font-size: 30px;
-      font-weight: 700;
-      color: white;
+      font-size: 28px;
+      font-weight: 600;
+      color: #fffdf3;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
     }
 
     .status-badge {
@@ -476,26 +478,27 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       font-size: 14px;
       padding: 8px 16px;
       border-radius: 25px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(10, 31, 20, .55);
       color: white;
       font-weight: 600;
     }
 
     .status-badge.completed {
-      background: #22c55e;
+      background: var(--g-sun);
+      color: #0f3d24;
     }
 
     .mission-content {
       position: relative;
       z-index: 1;
       padding: 24px;
-      background: rgba(255, 255, 255, 0.92);
+      background: var(--c-paper);
     }
 
     .section-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #1e293b;
+      font-size: 21px;
+      font-weight: 600;
+      color: var(--c-forest);
       margin: 0 0 12px;
       display: flex;
       align-items: center;
@@ -503,20 +506,21 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     }
 
     .mission-text {
-      color: #475569;
+      color: #3d5145;
       font-size: 20px;
       line-height: 1.6;
       margin: 0;
-      padding: 16px;
-      background: #f8fafc;
-      border-radius: 12px;
-      border-left: 4px solid #667eea;
+      padding: 16px 18px;
+      background: var(--c-morning);
+      border-radius: 14px;
+      border-left: 5px solid var(--c-moss);
+      color: var(--c-ink);
     }
 
     .task-list {
       margin: 12px 0 0;
       padding-left: 18px;
-      color: #475569;
+      color: #3d5145;
       font-size: 20px;
       line-height: 1.6;
     }
@@ -528,24 +532,24 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     .mission-note-input {
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #c6d3bf;
       border-radius: 12px;
       padding: 12px;
       font-size: 18px;
-      color: #1e293b;
+      color: #13241a;
       background: #ffffff;
       resize: vertical;
       min-height: 96px;
     }
 
     .mission-note-input:focus-visible {
-      outline: 3px solid rgba(102, 126, 234, 0.25);
+      outline: 3px solid rgba(31, 107, 58, 0.25);
       outline-offset: 2px;
     }
 
     .question-box {
       background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
-      border: 2px solid #7c3aed;
+      border: 2px solid #6b4423;
       border-radius: 16px;
       padding: 16px;
       position: relative;
@@ -553,7 +557,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
 
     .question-box p {
       margin: 0 0 16px;
-      color: #1e293b;
+      color: #13241a;
       font-size: 20px;
       font-weight: 500;
       line-height: 1.6;
@@ -586,16 +590,16 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     }
 
     .choice-btn.selected {
-      background: linear-gradient(135deg, #a5f3fc 0%, #67e8f9 100%);
-      border-color: #06b6d4;
-      color: #0e7490;
+      background: linear-gradient(135deg, #d4ecc6 0%, #67e8f9 100%);
+      border-color: #2f8f4e;
+      color: #14532d;
       font-weight: 700;
     }
 
     .photo-btn {
       width: 100%;
       padding: 14px 16px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1f6b3a 0%, #14532d 100%);
       color: white;
       border: none;
       border-radius: 12px;
@@ -607,13 +611,13 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       justify-content: center;
       gap: 10px;
       transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-      box-shadow: 0 4px 16px rgba(102, 126, 234, 0.35);
+      box-shadow: 0 4px 16px rgba(31, 107, 58, 0.35);
     }
 
     .photo-btn:hover {
       transform: translateY(-2px);
       filter: brightness(1.02);
-      box-shadow: 0 6px 22px rgba(102, 126, 234, 0.45);
+      box-shadow: 0 6px 22px rgba(31, 107, 58, 0.45);
     }
 
     .photo-btn:active {
@@ -629,7 +633,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       margin: 10px 0 0;
       font-size: 16px;
       line-height: 1.35;
-      color: #475569;
+      color: #3d5145;
     }
 
     .photo-preview {
@@ -646,49 +650,53 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       max-height: 65vh;
       object-fit: contain;
       border-radius: 14px;
-      border: 2px solid #e2e8f0;
-      background: #f8fafc;
+      border: 2px solid #dbe3d0;
+      background: #f7f8f0;
     }
 
     .read-more-btn {
       width: 100%;
       padding: 14px 20px;
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      min-height: 50px;
+      background: var(--g-leaf);
       color: white;
       border: none;
-      border-radius: 12px;
+      border-radius: 999px;
+      font-family: var(--f-head);
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.28);
+      box-shadow: 0 4px 16px rgba(47, 143, 78, 0.28);
     }
 
     .read-more-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.38);
+      box-shadow: 0 6px 24px rgba(47, 143, 78, 0.38);
     }
 
     .card-footer {
       position: relative;
       z-index: 1;
       padding: 24px;
-      background: rgba(248, 250, 252, 0.98);
-      border-top: 2px solid #e2e8f0;
+      background: var(--c-mist);
+      border-top: 1px solid var(--c-line);
     }
 
     .save-btn {
       width: 100%;
+      min-height: 58px;
       padding: 16px;
-      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      background: var(--g-leaf);
       color: white;
       border: none;
-      border-radius: 12px;
-      font-size: 22px;
-      font-weight: 700;
+      border-radius: 999px;
+      font-family: var(--f-head);
+      font-size: 20px;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.18);
+      box-shadow: 0 8px 22px #1f6b3a4d;
     }
 
     .save-btn:hover {
@@ -707,13 +715,13 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     .empty-state h3 {
       font-size: 24px;
       font-weight: 700;
-      color: #1e293b;
+      color: #13241a;
       margin: 0 0 12px;
     }
 
     .empty-state p {
       font-size: 16px;
-      color: #64748b;
+      color: #55695c;
       margin: 0;
     }
 
@@ -726,7 +734,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     }
 
     .answer-feedback.correct {
-      border-left-color: #16a34a;
+      border-left-color: #1f6b3a;
       background: #dcfce7;
     }
 
@@ -746,7 +754,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
 
     .answer-feedback .feedback-message {
       font-size: 18px;
-      color: #374151;
+      color: #2a3d31;
       margin: 0 0 12px;
       line-height: 1.5;
     }
@@ -754,7 +762,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     .continue-btn {
       width: 100%;
       padding: 12px 16px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      background: linear-gradient(135deg, #2f8f4e 0%, #1f6b3a 100%);
       color: white;
       border: none;
       border-radius: 10px;
@@ -763,19 +771,19 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       cursor: pointer;
       transition: all 0.3s ease;
       margin-top: 16px;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 12px rgba(47, 143, 78, 0.3);
     }
 
     .continue-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 6px 20px rgba(47, 143, 78, 0.4);
     }
 
     .share-btn {
       width: 100%;
       padding: 14px 16px;
       margin-top: 12px;
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      background: linear-gradient(135deg, #2f8f4e 0%, #1f6b3a 100%);
       color: white;
       border: none;
       border-radius: 12px;
@@ -783,12 +791,12 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       font-weight: 700;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 16px rgba(47, 143, 78, 0.3);
     }
 
     .share-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 6px 24px rgba(47, 143, 78, 0.4);
     }
 
     .share-link {
@@ -796,7 +804,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       padding: 14px;
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.92);
-      border: 1px solid #e2e8f0;
+      border: 1px solid #dbe3d0;
       max-width: 100%;
       overflow: hidden;
       box-sizing: border-box;
@@ -806,7 +814,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       display: block;
       font-size: 13px;
       font-weight: 700;
-      color: #1e293b;
+      color: #13241a;
       margin: 0 0 8px;
       overflow-wrap: anywhere;
     }
@@ -815,9 +823,9 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       width: 100%;
       padding: 12px 12px;
       border-radius: 10px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #c6d3bf;
       font-size: 14px;
-      color: #0f172a;
+      color: #0a1f14;
       background: #ffffff;
       max-width: 100%;
       min-width: 0;
@@ -825,14 +833,14 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     }
 
     .share-link-input:focus-visible {
-      outline: 3px solid rgba(59, 130, 246, 0.25);
+      outline: 3px solid rgba(47, 143, 78, 0.25);
       outline-offset: 2px;
     }
 
     .share-link-hint {
       margin: 8px 0 0;
       font-size: 12px;
-      color: #64748b;
+      color: #55695c;
       line-height: 1.4;
       overflow-wrap: anywhere;
     }
@@ -916,7 +924,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     .completion-popup .popup-message {
       margin: 0;
       font-size: 14px;
-      color: #334155;
+      color: #2a3d31;
       line-height: 1.5;
     }
 
@@ -929,7 +937,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     .mission-tutorial-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.68);
+      background: rgba(10, 31, 20, 0.68);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -946,7 +954,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       width: min(100%, 420px);
       max-height: 70%;
       overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.26);
+      box-shadow: 0 20px 60px rgba(10, 31, 20, 0.26);
     }
 
     .mission-tutorial-card h4 {
@@ -957,7 +965,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
 
     .mission-tutorial-card p {
       margin: 0 0 16px;
-      color: #334155;
+      color: #2a3d31;
       line-height: 1.5;
     }
 
@@ -968,14 +976,14 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       height: auto;
       margin: 0 auto 12px;
       border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      border: 1px solid #dbe3d0;
+      box-shadow: 0 8px 24px rgba(10, 31, 20, 0.12);
     }
 
     .mission-tutorial-helper-text {
       margin: 0 0 16px;
       font-size: 15px;
-      color: #475569;
+      color: #3d5145;
       line-height: 1.5;
       text-align: center;
     }
@@ -994,16 +1002,16 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       height: 52px;
       border-radius: 12px;
       border: none;
-      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      background: linear-gradient(135deg, #5fae5a 0%, #2f8f4e 100%);
       color: white;
       font-size: 20px;
       font-weight: 800;
-      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.18);
+      box-shadow: 0 10px 30px rgba(47, 143, 78, 0.18);
       cursor: pointer;
       transition: transform 0.12s ease, box-shadow 0.12s ease;
     }
-    .help-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(16, 185, 129, 0.22); }
-    .help-btn:focus-visible { outline: 3px solid rgba(16, 185, 129, 0.24); outline-offset: 2px; }
+    .help-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(47, 143, 78, 0.22); }
+    .help-btn:focus-visible { outline: 3px solid rgba(47, 143, 78, 0.24); outline-offset: 2px; }
 
     .completion-confirm-btn {
       width: 100%;
@@ -1013,7 +1021,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+      background: linear-gradient(135deg, #166534 0%, #3a9a52 100%);
       color: #ffffff;
     }
 
@@ -1025,7 +1033,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+      background: linear-gradient(135deg, #166534 0%, #3a9a52 100%);
       color: #ffffff;
     }
 
@@ -1057,7 +1065,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
     }
 
     .upload-notification-overlay.success .upload-notification-popup {
-      border-color: #22c55e;
+      border-color: #3a9a52;
     }
 
     .upload-notification-overlay.error .upload-notification-popup {
@@ -1074,11 +1082,11 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       font-size: 20px;
       font-weight: 700;
       margin: 0 0 12px;
-      color: #1e293b;
+      color: #13241a;
     }
 
     .upload-notification-overlay.success .notification-title {
-      color: #16a34a;
+      color: #1f6b3a;
     }
 
     .upload-notification-overlay.error .notification-title {
@@ -1087,7 +1095,7 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
 
     .notification-message {
       font-size: 14px;
-      color: #64748b;
+      color: #55695c;
       margin: 0;
       line-height: 1.5;
     }
@@ -1109,8 +1117,8 @@ const INITIAL_CHECKPOINTS: Checkpoint[] = []; // Will be loaded from localStorag
       font-weight: 700;
       cursor: pointer;
       color: white;
-      background: #22c55e;
-      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      background: #3a9a52;
+      background: linear-gradient(135deg, #3a9a52 0%, #1f6b3a 100%);
       box-shadow: 0 4px 14px rgba(34, 197, 94, 0.25);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }

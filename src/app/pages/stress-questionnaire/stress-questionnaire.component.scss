@@ -19,8 +19,8 @@
   overflow: hidden;
   padding: 28px clamp(20px, 5vw, 72px) 34px;
   color: #183b35;
-  background: #f5f1e8;
-  font-family: Georgia, 'Times New Roman', serif;
+  background: rgba(245, 241, 232, .88);
+  font-family: var(--f-body);
 }
 
 .page-glow {

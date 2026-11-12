@@ -66,7 +66,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     .summary-page {
       min-height: 100vh;
       padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1f6b3a 0%, #14532d 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -120,7 +120,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       position: relative;
       width: 100%;
       overflow: hidden;
-      border: 1px solid #e5e7eb;
+      border: 1px solid #dbe3d0;
       border-radius: 8px;
       background: white;
     }
@@ -153,7 +153,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       flex-direction: column;
       gap: 16px;
       padding: 20px;
-      background: #f8fafc;
+      background: #f7f8f0;
       border-radius: 8px;
     }
 
@@ -188,7 +188,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       flex-shrink: 0;
       width: 32px;
       height: 32px;
-      background: #667eea;
+      background: #1f6b3a;
       color: white;
       border-radius: 50%;
       display: flex;
@@ -219,11 +219,11 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       font-weight: 600;
       border: none;
       border-radius: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1f6b3a 0%, #14532d 100%);
       color: white;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(31, 107, 58, 0.4);
     }
 
     .share-btn {
@@ -250,7 +250,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
     .continue-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+      box-shadow: 0 6px 16px rgba(31, 107, 58, 0.6);
     }
 
     .continue-btn:active {

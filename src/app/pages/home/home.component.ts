@@ -68,6 +68,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   completedCount = computed(() => this.checkpoints().filter(c => c.reached).length);
   totalCount = computed(() => this.checkpoints().length);
+  progressPercent = computed(() => {
+    const total = this.totalCount();
+    return total ? Math.round((this.completedCount() / total) * 100) : 0;
+  });
 
   // Approximate layout positions (percent) for checkpoints 1..17
   private readonly trailPositions: Record<number, { x: number; y: number; }> = {

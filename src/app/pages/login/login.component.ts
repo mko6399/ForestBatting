@@ -93,7 +93,7 @@ export class LoginComponent {
       (error: any) => {
         this.isSendingCode = false;
         console.error('❌ Send code error:', error);
-        this.errorMessage = error.error?.message || 'Failed to send verification code. Please try again.';
+        this.errorMessage = this.describeAuthError(error);
       }
     );
   }
@@ -101,6 +101,32 @@ export class LoginComponent {
   resendCode(): void {
     this.code = '';
     this.sendCode();
+  }
+
+  /**
+   * Turn a failure into something the person can act on.
+   *
+   * The two cases that look identical in a console but need different advice: the request
+   * timed out (the server is probably still trying to send the mail, so checking the inbox
+   * is worth it), and the request never reached the server at all.
+   */
+  private describeAuthError(error: any): string {
+    const isThai = this.languageService.currentLanguage().code === 'th';
+
+    if (error?.name === 'TimeoutError') {
+      return isThai
+        ? 'เซิร์ฟเวอร์ตอบกลับช้าผิดปกติ ระบบอาจกำลังส่งอีเมลอยู่ — กรุณาตรวจกล่องจดหมายของคุณก่อน ถ้ายังไม่ได้รับให้ลองใหม่อีกครั้ง'
+        : 'The server is taking longer than usual. It may still be sending your email — check your inbox first, then try again if nothing arrives.';
+    }
+
+    if (error?.status === 0) {
+      return isThai
+        ? 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาตรวจสัญญาณอินเทอร์เน็ตแล้วลองใหม่'
+        : 'Could not reach the server. Check your connection and try again.';
+    }
+
+    return error?.error?.message
+      || (isThai ? 'ส่งรหัสยืนยันไม่สำเร็จ กรุณาลองใหม่อีกครั้ง' : 'Failed to send verification code. Please try again.');
   }
 
   onVerifyCode(): void {

@@ -1,119 +1,129 @@
 .language-selector-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 90vw;
-  height: 100vh;
-  height: 100dvh;
-  background: rgba(0, 0, 0, 0.7);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  inset: 0;
+  box-sizing: border-box;
+  /* Dimmed canopy: the swaying forest stays faintly visible behind the card. */
+  background: rgba(10, 31, 20, .62);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
-  animation: fadeIn 0.3s ease-out;
-  padding: 1rem;
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  animation: forest-fade var(--t-base) var(--ease-settle) both;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
 }
 
 .language-selector-modal {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 600px;
+  background: var(--c-paper);
+  border-radius: 24px;
+  box-shadow: var(--shadow-float);
+  max-width: 520px;
   width: 100%;
-  max-height: calc(100dvh - 2rem - env(safe-area-inset-bottom));
+  max-height: calc(100dvh - 32px - env(safe-area-inset-bottom));
   overflow-y: auto;
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  animation: forest-rise var(--t-slow) var(--ease-settle) both;
 }
 
 .modal-header {
-  padding: 2rem;
+  padding: 30px 24px 26px;
   text-align: center;
-  border-bottom: 1px solid #e5e7eb;
+  color: #fffdf3;
+  background:
+    radial-gradient(70% 120% at 85% 0%, rgba(253, 230, 138, .4), transparent 60%),
+    var(--g-canopy);
+
+  &::before {
+    content: "🌿";
+    display: inline-grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    background: var(--g-sun);
+    font-size: 28px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
+  }
 
   h2 {
-    margin: 0;
-    font-size: 1.75rem;
-    color: #1f2937;
+    margin: 0 0 8px;
+    font-family: var(--f-head);
+    font-size: 23px;
+    color: #fffdf3;
     font-weight: 600;
   }
 
   .subtitle {
-    margin: 0.5rem 0 0;
-    color: #6b7280;
-    font-size: 1rem;
+    margin: 2px 0 0;
+    color: rgba(244, 241, 227, .88);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* "ยินดีต้อนรับสู่เส้นทางการอาบป่า" reads as the Thai title, not a footnote. */
+  .subtitle:first-of-type {
+    font-family: var(--f-head);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--c-sunlight);
+    margin-bottom: 10px;
   }
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 22px 20px 8px;
 }
 
 .languages-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 .language-option {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  background: white;
+  gap: 14px;
+  min-height: 72px;
+  padding: 14px 16px;
+  border: 2px solid var(--c-line);
+  border-radius: 18px;
+  background: #fff;
   cursor: pointer;
-  transition: all 0.2s ease;
+  text-align: left;
+  transition: border-color var(--t-quick) ease, background var(--t-quick) ease, transform var(--t-quick) ease, box-shadow var(--t-quick) ease;
   position: relative;
 
   &:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
+    border-color: var(--c-leaf);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    box-shadow: var(--shadow-rest);
   }
 
   &.selected {
-    border-color: #3b82f6;
-    background: #eff6ff;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  &:active {
-    transform: translateY(0);
+    border-color: var(--c-moss);
+    background: var(--c-morning);
+    box-shadow: 0 0 0 4px rgba(47, 143, 78, .16);
   }
 
   &:focus-visible {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    border-color: var(--c-moss);
+    box-shadow: 0 0 0 4px rgba(47, 143, 78, .25);
   }
 
   .flag {
-    font-size: 2rem;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--c-mist);
+    font-family: var(--f-head);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--c-forest);
     line-height: 1;
   }
 
@@ -122,94 +132,77 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    text-align: left;
 
     .native-name {
-      font-size: 1rem;
+      font-family: var(--f-head);
+      font-size: 18px;
       font-weight: 600;
-      color: #1f2937;
-      line-height: 1.2;
+      color: var(--c-ink);
+      line-height: 1.25;
     }
 
     .english-name {
-      font-size: 0.875rem;
-      color: #6b7280;
-      line-height: 1.2;
-      margin-top: 0.25rem;
+      font-size: 13px;
+      color: var(--c-pebble);
+      line-height: 1.3;
+      margin-top: 2px;
     }
   }
 
   .check-icon {
-    font-size: 1.25rem;
-    color: #3b82f6;
-    font-weight: bold;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--c-moss);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
   }
 }
 
 .modal-footer {
-  padding: 1.5rem 2rem 2rem;
+  padding: 18px 20px 22px;
+  padding-bottom: calc(22px + env(safe-area-inset-bottom));
   text-align: center;
-  border-top: 1px solid #e5e7eb;
-
-  padding-bottom: calc(2rem + env(safe-area-inset-bottom));
 
   .confirm-btn {
     width: 100%;
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    min-height: 54px;
+    padding: 14px 24px;
+    font-family: var(--f-head);
+    font-size: 17px;
     font-weight: 600;
     color: white;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: var(--g-leaf);
     border: none;
-    border-radius: 12px;
+    border-radius: var(--r-pill);
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: transform var(--t-quick) ease, box-shadow var(--t-quick) ease;
+    box-shadow: 0 8px 20px rgba(31, 107, 58, .32);
 
     &:hover:not(.disabled) {
-      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-    }
-
-    &:active:not(.disabled) {
-      transform: translateY(0);
+      box-shadow: 0 12px 26px rgba(31, 107, 58, .38);
     }
 
     &.disabled {
-      opacity: 0.5;
       cursor: not-allowed;
-      background: #9ca3af;
+      background: #b8c4b2;
       box-shadow: none;
     }
   }
 
   .info-text {
-    margin: 1rem 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
+    margin: 12px 0 0;
+    font-size: 14px;
+    color: var(--c-pebble);
   }
 }
 
-// Mobile responsive
-@media screen and (max-width: 640px) {
-  .languages-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .modal-header {
-    padding: 1.5rem 1rem;
-
-    h2 {
-      font-size: 1.5rem;
-    }
-  }
-
-  .modal-body {
-    padding: 1rem;
-  }
-
-  .modal-footer {
-    padding: 1rem;
-  }
+@media screen and (max-width: 380px) {
+  .languages-grid { grid-template-columns: 1fr; }
+  .modal-header h2 { font-size: 20px; }
 }

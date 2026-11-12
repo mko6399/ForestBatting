@@ -1,8 +1,21 @@
 <section class="home-trail" aria-label="Forest Bathing Trail home">
   <div class="trail-card" *ngIf="!isLoading(); else loading">
+    <header class="home-hero u-rise">
+      <div class="hero-copy">
+        <p class="hero-eyebrow">{{ currentLang() === 'th' ? 'ชินรินโยกุ · การอาบป่า' : 'Shinrin-yoku · Forest bathing' }}</p>
+        <h2 class="hero-title">{{ currentLang() === 'th' ? 'ค่อย ๆ เดิน หายใจลึก ๆ' : 'Walk slowly, breathe deeply' }}</h2>
+      </div>
+      <div class="hero-progress" role="img"
+           [attr.aria-label]="completedCount() + '/' + totalCount() + ' checkpoints'"
+           [style.--p]="progressPercent()">
+        <strong>{{ completedCount() }}<small>/{{ totalCount() }}</small></strong>
+        <span>{{ currentLang() === 'th' ? 'ฐาน' : 'stops' }}</span>
+      </div>
+    </header>
+
     <p class="error" *ngIf="loadError()">{{ loadError() }}</p>
 
-    <div class="trail-map" aria-label="Trail infographic">
+    <div class="trail-map u-rise" style="animation-delay:120ms" aria-label="Trail infographic">
       <img
         class="trail-poster"
         [src]="posterSrc()"
@@ -12,7 +25,7 @@
       />
     </div>
 
-    <div class="start-area">
+    <div class="start-area u-rise" style="animation-delay:200ms">
       <p class="stop-warning" *ngIf="isTracking()" role="note">{{ t().home.stopWarning }}</p>
       <button
         class="start-btn"
@@ -26,7 +39,7 @@
       </button>
 
       <p class="visitor-count" *ngIf="visitorCount() !== null" role="status">
-        👥 {{ visitorCount() }} visitors
+        👥 {{ visitorCount() }} {{ currentLang() === 'th' ? 'ผู้มาเยือน' : 'visitors' }}
       </p>
 
       <!-- <button
@@ -88,7 +101,8 @@
       </div>
 
       <div class="progress">
-        {{ completedCount() }}/{{ totalCount() }} checkpoints
+        <span class="progress-bar" aria-hidden="true"><span [style.width.%]="progressPercent()"></span></span>
+        {{ completedCount() }}/{{ totalCount() }} {{ currentLang() === 'th' ? 'ฐานที่ผ่านแล้ว' : 'checkpoints' }}
       </div>
     </div>
   </div>

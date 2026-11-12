@@ -193,9 +193,9 @@ interface PreparedCertificate {
   `,
   styles: [`
     .cert-page {
-      max-height: calc(100dvh - 56px);
+      max-height: calc(100dvh - 64px);
       padding: 20px;
-      background: #f8fafc;
+      background: #f7f8f0;
       display: flex;
       flex-direction: column;
       gap: 24px;
@@ -234,7 +234,7 @@ interface PreparedCertificate {
 
     .name-label {
       font-weight: 700;
-      color: #1e293b;
+      color: #13241a;
       white-space: nowrap;
       font-size: 15px;
     }
@@ -243,7 +243,7 @@ interface PreparedCertificate {
       flex: 1;
       min-width: 120px;
       max-width: 250px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid #dbe3d0;
       border-radius: 10px;
       padding: 12px 16px;
       font-size: 16px;
@@ -254,13 +254,13 @@ interface PreparedCertificate {
 
     .name:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+      border-color: #1f6b3a;
+      box-shadow: 0 0 0 4px rgba(31, 107, 58, 0.15);
       background: #f8f7ff;
     }
 
     .btn {
-      border: 2px solid #cbd5e1;
+      border: 2px solid #c6d3bf;
       background: white;
       padding: 12px 20px;
       border-radius: 10px;
@@ -268,15 +268,15 @@ interface PreparedCertificate {
       font-size: 14px;
       cursor: pointer;
       transition: all 0.3s ease;
-      color: #1e293b;
+      color: #13241a;
     }
 
     .btn:hover {
-      background: linear-gradient(135deg, #667eea, #5a67d8);
-      border-color: #667eea;
+      background: linear-gradient(135deg, #1f6b3a, #5a67d8);
+      border-color: #1f6b3a;
       color: white;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 4px 12px rgba(31, 107, 58, 0.3);
     }
 
     .btn:active {
@@ -284,12 +284,12 @@ interface PreparedCertificate {
     }
 
     .time {
-      color: #64748b;
+      color: #55695c;
       font-weight: 700;
       font-size: 16px;
       white-space: nowrap;
       padding: 8px 16px;
-      background: #f1f5f9;
+      background: #edf1e4;
       border-radius: 8px;
     }
 
@@ -445,7 +445,7 @@ interface PreparedCertificate {
       flex-direction: column;
       justify-content: space-between;
       gap: 10px;
-      color: #1e293b;
+      color: #13241a;
     }
 
     .top {
@@ -518,7 +518,7 @@ interface PreparedCertificate {
 
     .certify {
       margin-top: 8px;
-      color: #334155;
+      color: #2a3d31;
       font-weight: 600;
       font-size: 18px;
       font-family: 'Georgia', serif;
@@ -532,7 +532,7 @@ interface PreparedCertificate {
       margin: 0 auto;
       font-size: 46px;
       font-weight: 900;
-      border-bottom: 2px solid rgba(15, 23, 42, 0.35);
+      border-bottom: 2px solid rgba(10, 31, 20, 0.35);
       padding-bottom: 10px;
       width: 88%;
       max-width: 720px;
@@ -542,7 +542,7 @@ interface PreparedCertificate {
     }
 
     .completion {
-      color: #334155;
+      color: #2a3d31;
       font-weight: 600;
       font-size: 18px;
       line-height: 1.45;
@@ -635,7 +635,7 @@ interface PreparedCertificate {
     }
 
     .sign-title {
-      color: #334155;
+      color: #2a3d31;
       font-weight: 600;
       font-size: 12px;
       margin-top: 2px;
@@ -654,7 +654,7 @@ interface PreparedCertificate {
     }
 
     .issued-label {
-      color: #334155;
+      color: #2a3d31;
       font-weight: 600;
       font-size: 12px;
       margin-top: 4px;
@@ -675,7 +675,7 @@ interface PreparedCertificate {
     .save-hint {
       margin: 0 0 4px;
       font-size: 14px;
-      color: #475569;
+      color: #3d5145;
     }
 
     .save-error {
@@ -722,9 +722,9 @@ interface PreparedCertificate {
     }
 
     .act-finish {
-      background: #f1f5f9;
-      color: #334155;
-      border-color: #cbd5e1;
+      background: #edf1e4;
+      color: #2a3d31;
+      border-color: #c6d3bf;
     }
 
     /*
@@ -753,7 +753,7 @@ interface PreparedCertificate {
       max-width: 100%;
       height: auto;
       border-radius: 8px;
-      border: 1px solid #d1d5db;
+      border: 1px solid #c6d3bf;
     }
 
     .pdf-dialog-backdrop {
@@ -763,7 +763,7 @@ interface PreparedCertificate {
       display: grid;
       place-items: center;
       padding: 20px;
-      background: rgba(15, 23, 42, .52);
+      background: rgba(10, 31, 20, .52);
     }
 
     .pdf-dialog {
@@ -771,7 +771,7 @@ interface PreparedCertificate {
       padding: 24px;
       border-radius: 12px;
       background: #fff;
-      box-shadow: 0 18px 50px rgba(15, 23, 42, .28);
+      box-shadow: 0 18px 50px rgba(10, 31, 20, .28);
       text-align: left;
     }
 
@@ -783,7 +783,7 @@ interface PreparedCertificate {
 
     .pdf-dialog p {
       margin: 0;
-      color: #334155;
+      color: #2a3d31;
       line-height: 1.5;
     }
 

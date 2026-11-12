@@ -5,6 +5,7 @@ import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { CommonModule } from '@angular/common';
 import { LanguageSelectorComponent } from './components/language-selector/language-selector.component';
 import { ConsentBannerComponent } from './components/consent-banner/consent-banner.component';
+import { ForestBackdropComponent } from './components/forest-backdrop/forest-backdrop.component';
 import { LanguageService } from './services/language.service';
 import { StorageService } from './services/storage.service';
 import { LocationTrackingService } from './services/location-tracking.service';
@@ -16,8 +17,11 @@ import { filter, startWith, map } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SideNavComponent, CommonModule, LanguageSelectorComponent, ConsentBannerComponent],
+  imports: [RouterOutlet, SideNavComponent, CommonModule, LanguageSelectorComponent, ConsentBannerComponent, ForestBackdropComponent],
   template: `
+    <!-- The living forest sits behind every route, shell or standalone. -->
+    <app-forest-backdrop [calm]="!isStandaloneRoute()" />
+
     <app-language-selector
       *ngIf="showLanguageSelector()"
       (languageSelected)="onLanguageSelected()"
@@ -25,6 +29,7 @@ import { filter, startWith, map } from 'rxjs/operators';
 
     <div class="evaluation-overlay" *ngIf="showPreUseEvaluation()">
       <section class="evaluation-modal" role="dialog" aria-modal="true" [attr.aria-label]="t.common.preUseEvaluationTitle">
+        <span class="modal-leaf" aria-hidden="true">🌿</span>
         <h2>{{ t.common.preUseEvaluationTitle }}</h2>
         <p>{{ t.common.preUseEvaluationDescription }}</p>
         <a class="evaluation-link" href="/stress-questionnaire" (click)="openStressQuestionnaire($event)">
@@ -54,16 +59,24 @@ import { filter, startWith, map } from 'rxjs/operators';
         <div class="app-main" [class.has-sidebar]="true">
           <!-- Top bar -->
           <header class="app-topbar">
-            <h1 class="app-title">Forest Bathing Trail</h1>
+            <div class="app-brand">
+              <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32"><path d="M26 5C15 5 7 10 6 19c-.4 3 .3 5.6 1.6 7.4l-3 3a1 1 0 1 0 1.4 1.4l3-3c1.8 1.3 4.4 2 7.4 1.6C25 28 27 17 26 5Z" fill="currentColor"/><path d="M21 10c-5 4.6-9 10-11.6 16.5" stroke="#0f3d24" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+              </span>
+              <span class="brand-text">
+                <h1 class="app-title">Forest Bathing Trail</h1>
+                <span class="app-tagline">{{ currentLang() === 'th' ? 'เส้นทางอาบป่า' : 'Shinrin-yoku trail' }}</span>
+              </span>
+            </div>
             <div class="topbar-actions">
               <span class="app-version">v{{ versionService.currentVersion }}</span>
               <!-- Language Selector -->
-              <div class="language-selector-top">
-                <button class="lang-btn-small" [class.active]="currentLang() === 'en'" (click)="setLanguage('en')">
-                  🇬🇧 EN
+              <div class="language-selector-top" role="group" aria-label="Language">
+                <button class="lang-btn-small" [class.active]="currentLang() === 'en'" [attr.aria-pressed]="currentLang() === 'en'" (click)="setLanguage('en')">
+                  EN
                 </button>
-                <button class="lang-btn-small" [class.active]="currentLang() === 'th'" (click)="setLanguage('th')">
-                  🇹🇭 TH
+                <button class="lang-btn-small" [class.active]="currentLang() === 'th'" [attr.aria-pressed]="currentLang() === 'th'" (click)="setLanguage('th')">
+                  ไทย
                 </button>
               </div>
 

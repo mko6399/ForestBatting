@@ -18,7 +18,13 @@
   <link rel="apple-touch-icon" href="assets/images/webapp-icon.jpg">
   <link rel="apple-touch-icon" sizes="1024x1024" href="assets/images/webapp-icon.jpg">
 
-  <meta name="theme-color" content="#22c55e">
+  <meta name="theme-color" content="#0f3d24">
+
+  <!-- Thai-first fonts. display=swap keeps text visible on a slow signal in the forest;
+       the service worker caches them after the first visit (see ngsw-config.json). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=Prompt:wght@500;600;700&display=swap">
 </head>
 <body>
   <app-root></app-root>

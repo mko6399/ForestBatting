@@ -941,9 +941,9 @@ export class MapComponent implements AfterViewInit {
       // Use a Canvas-rendered circle marker and a minimal tooltip for the number.
       const marker = L.circleMarker(latlng, {
         radius: 10,
-        color: checkpoint.reached ? '#2563eb' : '#16a34a',
+        color: checkpoint.reached ? '#1f6b3a' : '#1f6b3a',
         weight: 2,
-        fillColor: checkpoint.reached ? '#3b82f6' : '#10b981',
+        fillColor: checkpoint.reached ? '#2f8f4e' : '#2f8f4e',
         fillOpacity: 1,
         renderer: this.vectorRenderer || undefined,
         pane: 'checkpointMarkerPane'
@@ -1194,8 +1194,8 @@ export class MapComponent implements AfterViewInit {
       flyTo: true,
       drawCircle: false,
       markerStyle: {
-        fillColor: '#3b82f6', // blue-500
-        color: '#1e40af',    // blue-800
+        fillColor: '#2f8f4e', // blue-500
+        color: '#14532d',    // blue-800
         weight: 2,
         opacity: 1,
         fillOpacity: 0.7
@@ -1328,11 +1328,11 @@ export class MapComponent implements AfterViewInit {
     container.innerHTML = `
       <div style="background:#fff;border-radius:12px;box-shadow:0 20px 45px rgba(0,0,0,.35);
                   padding:24px;width:100%;max-width:24rem;text-align:center;">
-        <h3 style="font-size:20px;font-weight:700;color:#dc2626;margin:0 0 12px;">${title}</h3>
-        <p style="color:#374151;margin:0 0 24px;">${message}</p>
+        <h3 style="font-size:20px;font-weight:700;color:#14532d;font-family:var(--f-head);font-weight:600;margin:0 0 12px;">${title}</h3>
+        <p style="color:#2a3d31;margin:0 0 24px;">${message}</p>
         <button id="close-message"
-                style="padding:10px 20px;background:#ef4444;color:#fff;font-weight:600;
-                       border:none;border-radius:8px;font-size:15px;min-height:44px;cursor:pointer;">
+                style="padding:10px 20px;background:#1f6b3a;border-radius:999px;color:#fff;font-weight:600;
+                       border:none;padding:10px 28px;font-size:15px;min-height:44px;cursor:pointer;">
           OK
         </button>
       </div>
@@ -1982,7 +1982,7 @@ export class MapComponent implements AfterViewInit {
         draggable: true,
         icon: L.divIcon({
           className: 'path-edit-marker',
-          html: '<div style="width: 12px; height: 12px; background: #3b82f6; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+          html: '<div style="width: 12px; height: 12px; background: #2f8f4e; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
           iconSize: [12, 12],
           iconAnchor: [6, 6]
         })
@@ -2026,7 +2026,7 @@ export class MapComponent implements AfterViewInit {
       draggable: true,
       icon: L.divIcon({
         className: 'path-edit-marker',
-        html: '<div style="width: 12px; height: 12px; background: #3b82f6; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+        html: '<div style="width: 12px; height: 12px; background: #2f8f4e; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
         iconSize: [12, 12],
         iconAnchor: [6, 6]
       })
@@ -2169,7 +2169,7 @@ export class MapComponent implements AfterViewInit {
     // Keep guide path behind the user's/drawn overlays
     this.guidePathBorder.bringToBack();
     this.guidePathPolyline.bringToBack();
-    const guideArrowColor = this.isMission16CompletedForRoute() ? '#2563eb' : '#dc2626';
+    const guideArrowColor = this.isMission16CompletedForRoute() ? '#1f6b3a' : '#dc2626';
     this.updateDirectionMarkers(path, this.guidePathDirectionMarkers, guideArrowColor);
   }
 
