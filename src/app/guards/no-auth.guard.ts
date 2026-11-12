@@ -22,8 +22,9 @@ export class NoAuthGuard implements CanActivate {
     const token = this.storage.getAuthToken();
 
     if (token) {
-      // User already has token - skip login/register, go to map
-      this.router.navigate(['/map']);
+      // Already signed in - skip login and go where they were heading.
+      const returnUrl = route.queryParamMap.get('returnUrl');
+      this.router.navigateByUrl(returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//') ? returnUrl : '/home');
       return false;
     } else {
       // No token - allow access to login/register

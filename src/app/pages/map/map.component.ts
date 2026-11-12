@@ -509,6 +509,9 @@ export class MapComponent implements AfterViewInit {
 
   ngOnDestroy(): void {
     this.destroyed = true;
+    if (this.walkerStopTimer) clearTimeout(this.walkerStopTimer);
+    this.clearFootprints();
+    document.documentElement.classList.remove('map-moving');
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', this.invalidateMapSize);
       window.removeEventListener('layout-changed', this.invalidateMapSize as any);
@@ -741,21 +744,154 @@ export class MapComponent implements AfterViewInit {
     // This method is intentionally kept as a no-op for backward compatibility.
   }
 
-  private getUserIcon(heading: number | null): any {
-    // Determine direction based on heading
-    // Right GIF: heading between 0-180 degrees (moving right/east)
-    // Left GIF: heading between 180-360 degrees (moving left/west)
-    const isMovingRight = heading !== null && heading !== undefined && heading >= 0 && heading < 180;
-    const iconUrl = isMovingRight ? '/assets/images/usermark-right.gif' : '/assets/images/usermark-left.gif';
 
-    return L.icon({
-      iconUrl: iconUrl,
-      shadowUrl: 'vendor/leaflet/images/marker-shadow.png',
-      iconSize: [41, 41],
-      iconAnchor: [20, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
+  // ---- "me" marker: the explorer --------------------------------------------------------
+  //
+  // An adventure-game player character for the forest-bathing walk: a chibi explorer with a
+  // leaf in the hat band, a bedroll backpack, a walking stick and a scarf that flutters.
+  // Around it: a bobbing gold "player" arrow, a slowly turning rune ring at the feet, a cone
+  // for the exact bearing, leaves kicked up while walking, footprints left behind, and a
+  // "deep breath" 🍃 bubble when the visitor pauses — the point of forest bathing.
+  //
+  // Built once as a divIcon and only restyled afterwards (class toggles + one CSS variable):
+  // rebuilding it per fix restarted every animation. Styles: styles.scss, `.me-marker`.
+
+  /** Last known travel direction in degrees (0 = north), or null before any movement. */
+  private walkerHeading: number | null = null;
+  private walkerStopTimer: ReturnType<typeof setTimeout> | null = null;
+  /** Footprint markers still on the map, oldest first. */
+  private footprints: { marker: any; timer: ReturnType<typeof setTimeout> }[] = [];
+
+  private createWalkerIcon(): any {
+    return L.divIcon({
+      className: 'me-marker',
+      iconSize: [64, 84],
+      iconAnchor: [32, 74],
+      popupAnchor: [0, -66],
+      html: `
+        <span class="me-ring"><i></i></span>
+        <svg class="me-cone" viewBox="0 0 80 80" aria-hidden="true">
+          <defs><radialGradient id="meCone" cx="50%" cy="100%" r="100%">
+            <stop offset="0" stop-color="#f3cc62" stop-opacity=".7"/>
+            <stop offset="1" stop-color="#f3cc62" stop-opacity="0"/>
+          </radialGradient></defs>
+          <path d="M40 40 L20 4 A40 40 0 0 1 60 4 Z" fill="url(#meCone)"/>
+        </svg>
+        <span class="me-fx">
+          <i class="me-leaf"></i><i class="me-leaf"></i><i class="me-leaf"></i>
+        </span>
+        <span class="me-figure">
+          <svg viewBox="0 0 48 60" aria-hidden="true">
+            <g class="me-bob">
+              <g class="me-leg me-leg-back">
+                <path class="me-pants" d="M22 43 L21 53"/>
+                <rect class="me-boot" x="17.5" y="52" width="7.5" height="4.5" rx="2"/>
+              </g>
+              <path class="me-arm me-arm-back" d="M23 32 L19 39"/>
+              <rect class="me-bedroll" x="8.5" y="23" width="13.5" height="5.5" rx="2.75"/>
+              <rect class="me-pack" x="10" y="27.5" width="11" height="15" rx="3.2"/>
+              <rect class="me-pocket" x="11.5" y="34" width="6" height="5" rx="1.4"/>
+              <rect class="me-torso" x="18" y="29" width="13" height="15" rx="5"/>
+              <path class="me-strap" d="M21 29.5 L27 43"/>
+              <path class="me-belt" d="M18.4 40.5 h12.2"/>
+              <g class="me-scarf">
+                <path d="M22.5 29.5 L12.5 32 L15.5 35.5 Z"/>
+                <rect x="21" y="27.5" width="10" height="3.6" rx="1.8"/>
+              </g>
+              <g class="me-leg me-leg-front">
+                <path class="me-pants" d="M27 43 L28 53"/>
+                <rect class="me-boot" x="25.5" y="52" width="7.5" height="4.5" rx="2"/>
+              </g>
+              <path class="me-hair" d="M17 15 q-1 9 6 11 q-5 -6 -2 -12 Z"/>
+              <circle class="me-head" cx="26" cy="18" r="9.5"/>
+              <circle class="me-ear" cx="22" cy="19" r="2"/>
+              <ellipse class="me-eye" cx="31" cy="17.5" rx="1.3" ry="1.9"/>
+              <circle class="me-blush" cx="30" cy="21.8" r="1.8"/>
+              <path class="me-smile" d="M31.5 23 q1.2 .8 2.2 -.4"/>
+              <path class="me-crown" d="M17.5 11.5 Q18 2.5 26 2.5 Q34 2.5 34.5 11.5 Z"/>
+              <path class="me-band" d="M17.7 9.6 H34.3"/>
+              <path class="me-hatleaf" d="M19 9 q1 -6 7 -7 q-1 6 -7 7 Z"/>
+              <ellipse class="me-brim" cx="26" cy="11.6" rx="14" ry="2.8"/>
+              <g class="me-arm me-arm-front">
+                <path class="me-stick" d="M34.6 33.5 L37 57"/>
+                <circle class="me-knob" cx="34.5" cy="33" r="1.5"/>
+                <path class="me-sleeve" d="M28 32 L33 38.5"/>
+                <circle class="me-hand" cx="33.6" cy="38.6" r="1.9"/>
+              </g>
+            </g>
+          </svg>
+        </span>
+        <span class="me-arrow"></span>
+        <span class="me-emote">🍃</span>`,
     });
+  }
+
+  /** Compass bearing from one point to another, in degrees (0 = north, 90 = east). */
+  private bearingDeg(from: [number, number], to: [number, number]): number {
+    const r = Math.PI / 180;
+    const [lat1, lat2] = [from[0] * r, to[0] * r];
+    const dLng = (to[1] - from[1]) * r;
+    const y = Math.sin(dLng) * Math.cos(lat2);
+    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
+    return (Math.atan2(y, x) / r + 360) % 360;
+  }
+
+  /** Point the explorer and make it walk; after a pause it stops and takes a breath. */
+  private applyWalkerState(walking: boolean): void {
+    const el: HTMLElement | null = this.userMarker?.getElement?.() ?? null;
+    if (!el) return;
+
+    const h = this.walkerHeading;
+    el.classList.toggle('has-heading', h !== null);
+    // West-bound (180–360°) mirrors the side-view figure; the cone shows the exact bearing.
+    el.classList.toggle('face-left', h !== null && h > 180 && h < 360);
+    if (h !== null) el.style.setProperty('--me-heading', `${h}deg`);
+    el.classList.toggle('is-walking', walking);
+    el.classList.toggle('is-resting', !walking);
+
+    if (this.walkerStopTimer) clearTimeout(this.walkerStopTimer);
+    this.walkerStopTimer = null;
+    if (walking) {
+      // No fix beyond the GPS-wobble deadband for a while → the visitor has stopped.
+      this.walkerStopTimer = setTimeout(() => this.applyWalkerState(false), 6000);
+    }
+  }
+
+  /** Leave a fading footprint where the explorer just was, pointing the way it went. */
+  private dropFootprint(at: [number, number], heading: number | null): void {
+    if (!this.map) return;
+    const marker = L.marker(at, {
+      icon: L.divIcon({
+        className: 'me-step',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+        html: `<span style="transform: rotate(${heading ?? 0}deg)"><i></i><i></i></span>`,
+      }),
+      interactive: false,
+      keyboard: false,
+      zIndexOffset: -500,
+    }).addTo(this.map);
+
+    const timer = setTimeout(() => {
+      marker.remove();
+      this.footprints = this.footprints.filter(f => f.marker !== marker);
+    }, 9000);
+    this.footprints.push({ marker, timer });
+
+    // A short trail is enough; the green path line already shows the whole route.
+    while (this.footprints.length > 14) {
+      const old = this.footprints.shift()!;
+      clearTimeout(old.timer);
+      old.marker.remove();
+    }
+  }
+
+  private clearFootprints(): void {
+    for (const f of this.footprints) {
+      clearTimeout(f.timer);
+      f.marker.remove();
+    }
+    this.footprints = [];
   }
 
   private updateUserLocation(latitude: number, longitude: number): void {
@@ -768,7 +904,7 @@ export class MapComponent implements AfterViewInit {
     if (this.map) { // Ensure map is initialized
       // Get heading from the last tracked point
       const lastPoint = this.locationTracking.lastPoint();
-      const heading = lastPoint?.heading || null;
+      const heading = lastPoint?.heading ?? null; // ?? not ||: 0° (due north) is a real heading
 
       // Update user marker
       if (this.userMarker) {
@@ -782,20 +918,24 @@ export class MapComponent implements AfterViewInit {
           : Infinity;
 
         if (movedM >= this.moveDeadbandM(lastPoint?.accuracy)) {
+          // Direction: the device's own heading when it is moving and reports one (it is
+          // null or NaN on many phones at walking pace), otherwise the bearing we just walked.
+          const speed = lastPoint?.speed ?? null;
+          const gpsHeading = typeof heading === 'number' && Number.isFinite(heading) && speed !== null && speed > 0.4
+            ? heading : null;
+          this.walkerHeading = gpsHeading ?? (anchor ? this.bearingDeg(anchor, latlng) : this.walkerHeading);
+
+          if (anchor) this.dropFootprint(anchor, this.walkerHeading);
           this.userMarker.setLatLng(latlng);
           this.lastMarkerLatLng = latlng;
-          // Update icon based on direction (only when actually moving)
-          const newIcon = this.getUserIcon(heading);
-          this.userMarker.setIcon(newIcon);
+          this.applyWalkerState(true);
         }
       } else {
-        // Use directional icon based on heading
-        const userIcon = this.getUserIcon(heading);
-
-        this.userMarker = L.marker(latlng, { icon: userIcon })
+        this.userMarker = L.marker(latlng, { icon: this.createWalkerIcon(), zIndexOffset: 1000, keyboard: false })
           .addTo(this.map)
           .bindPopup(`You are here. ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
         this.lastMarkerLatLng = latlng;
+        this.applyWalkerState(false);
       }
 
       // Initialize checkpoints only once the user location is available
@@ -1160,6 +1300,21 @@ export class MapComponent implements AfterViewInit {
       markerZoomAnimation: !isMobile
     });
 
+    // The walker glides between fixes with a CSS transition on its transform. Leaflet also
+    // moves markers by transform when zooming, so switch the glide off for the zoom itself,
+    // otherwise the figure visibly slides into place after every pinch.
+    const container: HTMLElement = this.map.getContainer();
+    this.map.on('zoomstart', () => container.classList.add('me-no-glide'));
+    this.map.on('zoomend', () => requestAnimationFrame(() => requestAnimationFrame(
+      () => container.classList.remove('me-no-glide'))));
+
+    // While a finger is dragging or pinching the map, freeze every decorative animation
+    // (explorer, footprints, backdrop). The phone's whole frame budget then goes to moving
+    // tiles, which is what makes a drag feel smooth on a mid-range device.
+    const root = document.documentElement;
+    this.map.on('movestart zoomstart', () => root.classList.add('map-moving'));
+    this.map.on('moveend zoomend', () => root.classList.remove('map-moving'));
+
     this.streetTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       // OSM tiles are available up to z=19; beyond that Leaflet scales tiles.
       maxNativeZoom: 19,
@@ -1169,7 +1324,11 @@ export class MapComponent implements AfterViewInit {
         // Reduce tile redraw work during pinch-zoom on mobile
         updateWhenZooming: false,
         updateWhenIdle: true,
-        keepBuffer: 2
+        keepBuffer: 2,
+        // CORS (OSM sends Access-Control-Allow-Origin: *) so the service worker can keep
+        // tiles already seen: an opaque no-cors response counts as ~7 MB against the storage
+        // quota and would fill it after a handful of tiles. See ngsw-config.json "map-tiles".
+        crossOrigin: 'anonymous'
     });
 
     this.satelliteTiles = L.tileLayer(
@@ -1180,7 +1339,10 @@ export class MapComponent implements AfterViewInit {
         maxNativeZoom: 18,
         maxZoom: 22,
         minZoom: 2,
-        attribution: 'Tiles &copy; Esri'
+        attribution: 'Tiles &copy; Esri',
+        updateWhenZooming: false,
+        updateWhenIdle: true,
+        crossOrigin: 'anonymous'
       }
     );
 

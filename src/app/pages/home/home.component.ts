@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from '../../services/language.service';
 import { BaseDataService, Checkpoint } from '../../services/base-data.service';
 import { CertificateStatsStorage, StorageService } from '../../services/storage.service';
@@ -10,6 +10,11 @@ import { TutorialService } from '../../services/tutorial.service';
 import { EmailService } from '../../services/email.service';
 import { CertificatePdfService } from '../../services/certificate-pdf.service';
 import { VisitorService } from '../../services/visitor.service';
+import { DeviceCheckService } from '../../services/device-check.service';
+import { ConsentService } from '../../services/consent.service';
+
+const POSTER_PREVIEW_TH = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAkABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDcSaGO0LREGUDG7bnH1HenJfvOn7qRxHypeOHBBPvT7SGONNqSKFMWcYBNOCL5cKvOm4g7DgfN68VlZkR2HC/iiUKJc8ckx55opYzabcOu5l4JIx+lFJ2E9CC1WTyopEhWRWi4YAH8KlLtG0DNbhQQeigBfbFVosRRxqNyFUxtUDkYzTf7RgAQjzmK8EMFG4e9W5czuNLQtwLLOhYW6dcfMozRVELNeEyW/mFAdozx/nrRUuxk277GjexRW8KtHEm4rjcRkjj1qKCytdiZt0OWxyKKKImj3JHVLWRo4EVEznAFFFFZtu5Dep//2Q==';
+const POSTER_PREVIEW_EN = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAkABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDcWWFLJmibMwGNy8FT78VDbXd4wDR3DyIHxyuV+h4FWrW3hjACOoBiz0BP86eFXyoleZdzA7CFHzepxWNmRHYd9vijAVZM9+Y80UiNZgFZELMDgnbRSdhO5FarJ5cUkcSyK0XDAA/hUm943gZrdQpB6KBs9qrRYiSNRuQrH0AGCMZpv9o24CEecxXqGCgN9a0cuZ3GloXIFlnQuLdOpHzKAaKohZbzMlv5hQHHp/nrRUuzMm3fY07qCGCFWSJNxXG4jJHHrUcFhabFzAhycHNFFETR7kjxpau0cCBEznAHeiiis23chvU//9k=';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +32,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   private emailService = inject(EmailService);
   private certificatePdf = inject(CertificatePdfService);
   private visitorService = inject(VisitorService);
+  private device = inject(DeviceCheckService);
+  private consent = inject(ConsentService);
+
+  private route = inject(ActivatedRoute);
+  private zone = inject(NgZone);
+
+  /** The visitor has not answered the storage question yet; Start answers it for them. */
+  needsConsent = computed(() => this.consent.needsStorageDecision());
   private router = inject(Router);
 
   isLoading = signal(true);
@@ -131,10 +144,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   posterSrc = computed(() => {
     const lang = this.currentLang();
-    if (lang === 'en') return '/assets/images/forest-bathing-trail-home-en.png';
-    if (lang === 'th') return '/assets/images/forest-bathing-trail-home-th.png';
-    return '/assets/images/forest-bathing-trail-home-th.png';
+    // JPEG re-encodes of the original 2.4 MB PNGs: same 941×1672 size, ~270 kB each.
+    return lang === 'en'
+      ? '/assets/images/forest-bathing-trail-home-en-web.jpg'
+      : '/assets/images/forest-bathing-trail-home-th-web.jpg';
   });
+
+  /**
+   * 20px-wide copy of the poster (~1 kB, inlined), shown blurred until the real image has
+   * arrived — on a weak signal the visitor sees the trail map shape at once, not a blank box.
+   */
+  posterPreview = computed(() => this.currentLang() === 'en' ? POSTER_PREVIEW_EN : POSTER_PREVIEW_TH);
+  posterLoaded = signal(false);
 
   t() {
     return this.languageService.t();
@@ -142,6 +163,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.refreshMissions();
+
+    // Back from signing in at the end of the walk: carry on with the stop, no second confirm.
+    if (this.route.snapshot.queryParamMap.get('finish') === '1' && this.storage.getAuthToken()) {
+      void this.router.navigate([], { queryParams: {}, replaceUrl: true });
+      this.finishWalk();
+    }
 
     this.visitorService.getCount().subscribe({
       next: (res) => this.visitorCount.set(res.totalVisitors),
@@ -160,9 +187,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     if (typeof window !== 'undefined') {
-      this.refreshInterval = setInterval(() => {
-        this.refreshMissions();
-      }, 1000);
+      // Outside the zone: the timer itself no longer forces a whole-app check every second.
+      // `missions` is a signal fed from a cached snapshot (same array until the data really
+      // changes), so the page only redraws when progress actually moved.
+      this.zone.runOutsideAngular(() => {
+        this.refreshInterval = setInterval(() => this.refreshMissions(), 1000);
+      });
     }
   }
 
@@ -174,7 +204,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private refreshMissions(): void {
     try {
-      const missions = this.storage.getMissions();
+      const missions = this.storage.getMissionsSnapshot() as any[];
       this.missions.set(Array.isArray(missions) ? missions : []);
     } catch {
       this.missions.set([]);
@@ -186,12 +216,23 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // The intro dialog used to cost a tap here. Its one point (the "?" help button on each
+    // mission) is now a line on the Home page, so it is simply marked as seen.
     if (this.tutorialService.shouldPromptForIntro()) {
-      this.showTutorialPrompt.set(true);
-      return;
+      this.tutorialService.markIntroChoice(false);
     }
 
     this.beginTracking();
+  }
+
+  /** Small "don't store my data" link under Start: the walk then lives in memory only. */
+  declineStorage(): void {
+    this.consent.setStorageConsent('denied');
+    this.storage.forgetStoredData();
+  }
+
+  openPreWalkQuestionnaire(): void {
+    void this.router.navigate(['/stress-questionnaire']);
   }
 
   startTutorialJourney(): void {
@@ -200,7 +241,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.beginTracking();
   }
 
+  openDeviceCheck(): void {
+    void this.router.navigate(['/check']);
+  }
+
   private beginTracking(): void {
+    // Settle the cases where asking would be pointless before raising any prompt.
+    if (this.device.env.inApp) {
+      this.device.show('in-app-browser');
+      return;
+    }
+    const permission = this.locationTracking.permission();
+    if (permission === 'unsupported') {
+      this.device.show('geo-unsupported');
+      return;
+    }
+    if (permission === 'denied') {
+      // Android reports a sticky refusal; the prompt would never appear, so go straight to the fix.
+      this.device.show('geo-denied');
+      return;
+    }
+
+    // One tap does it all: Start is the consent (the text beside the button says so), the
+    // location prompt is raised from this same tap, and the walk begins.
+    if (this.consent.needsStorageDecision()) {
+      this.consent.setStorageConsent('granted');
+      this.storage.flushPendingWrites();
+    }
+    this.consent.setLocationConsent('granted');
+    void this.device.requestPersistence();
+
     // Start the timer the moment the user presses Start, so the certificate duration and
     // step count cover the whole walk — including the distance to the first checkpoint.
     // Guarded so an in-progress session (e.g. after a refresh) keeps its original start.
@@ -234,10 +304,22 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   stopTracking(): void {
-    if (!confirm('Data will be reset after you get certificate.')) {
+    const th = this.currentLang() === 'th';
+    if (!confirm(th ? 'จบการเดินและรับเกียรติบัตร? ข้อมูลการเดินจะถูกล้างหลังรับเกียรติบัตร' : 'Finish the walk and get your certificate? Walk data is cleared afterwards.')) {
       return;
     }
 
+    // Signing in happens here now, not before the walk: the certificate needs a name and an
+    // email. Login sends them back with ?finish=1 and ngOnInit completes the stop from there.
+    if (!this.storage.getAuthToken()) {
+      void this.router.navigate(['/login'], { queryParams: { returnUrl: '/home?finish=1' } });
+      return;
+    }
+
+    this.finishWalk();
+  }
+
+  private finishWalk(): void {
     this.locationTracking.stop();
     this.stopAfterEvaluation = true;
     this.showPostUseEvaluation.set(true);

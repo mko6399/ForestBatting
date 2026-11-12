@@ -232,3 +232,200 @@ h1, h2, h3, h4 {
 	from { transform: rotate(0deg); }
 	to { transform: rotate(360deg); }
 }
+
+/* ===================================================================
+   Map "me" marker — the explorer (built in MapComponent.createWalkerIcon)
+   ===================================================================
+   Adventure-game player character for the forest-bathing walk.
+   Icon box 64×84, feet (anchor) at 32,74.
+     .is-walking  legs, arms, stick and scarf swing; leaves kicked up
+     .is-resting  breathes; a 🍃 "deep breath" bubble floats up
+     .face-left   mirrors the side-view figure for west-bound travel
+     --me-heading exact bearing for the gold cone
+   Transform/opacity only, so it stays cheap on a phone holding GPS open.
+   =================================================================== */
+
+.me-marker {
+	/* Glide between GPS fixes instead of jumping. Disabled while zooming (see MapComponent). */
+	transition: transform 1.1s linear;
+	overflow: visible;
+}
+.me-no-glide .me-marker { transition: none; }
+.me-marker > * { position: absolute; pointer-events: none; }
+
+/* -- rune ring at the feet: an RPG "this is you" selector ------------------- */
+.me-ring {
+	left: 8px; top: 62px; width: 48px; height: 24px;
+}
+.me-ring i {
+	position: absolute; left: 0; top: -12px; width: 48px; height: 48px;
+	border-radius: 50%;
+	border: 2px dashed rgba(243, 204, 98, .95);
+	box-shadow: 0 0 0 3px rgba(31, 107, 58, .35), inset 0 0 10px rgba(243, 204, 98, .45);
+	background: radial-gradient(closest-side, rgba(15, 61, 36, .35), rgba(15, 61, 36, 0) 75%);
+	transform: scaleY(.45) rotate(0deg);
+	animation: me-rune 9s linear infinite;
+}
+.me-marker.is-walking .me-ring i { animation-duration: 3s; }
+
+/* -- direction cone ------------------------------------------------------- */
+.me-cone {
+	left: -8px; top: 34px; width: 80px; height: 80px;
+	transform-origin: 50% 50%;
+	transform: rotate(var(--me-heading, 0deg));
+	opacity: 0;
+	transition: opacity var(--t-base), transform .6s var(--ease-settle);
+}
+.me-marker.has-heading .me-cone { opacity: 1; }
+
+/* -- the explorer ------------------------------------------------------------ */
+.me-figure {
+	left: 8px; top: 17px; width: 48px; height: 60px;
+	filter: drop-shadow(0 0 1.2px #fff) drop-shadow(0 0 1.2px #fff) drop-shadow(0 3px 3px rgba(10, 31, 20, .4));
+	transition: transform .35s var(--ease-settle);
+}
+.me-marker.face-left .me-figure,
+.me-marker.face-left .me-fx { transform: scaleX(-1); }
+.me-figure svg { width: 100%; height: 100%; overflow: visible; }
+
+.me-figure .me-head    { fill: #f6cfa8; stroke: #8a5a3a; stroke-width: .9; }
+.me-figure .me-ear     { fill: #eab88e; stroke: #8a5a3a; stroke-width: .6; }
+.me-figure .me-hair    { fill: #4a2f1b; }
+.me-figure .me-eye     { fill: #1d2a22; }
+.me-figure .me-blush   { fill: #f08a7a; opacity: .55; }
+.me-figure .me-smile   { fill: none; stroke: #6b3a24; stroke-width: .9; stroke-linecap: round; }
+.me-figure .me-crown   { fill: #d9a24e; stroke: #7a4f1d; stroke-width: .9; }
+.me-figure .me-band    { stroke: #1f6b3a; stroke-width: 2.4; }
+.me-figure .me-hatleaf { fill: #5fae5a; stroke: #2f6b3a; stroke-width: .6; }
+.me-figure .me-brim    { fill: #c98a3a; stroke: #7a4f1d; stroke-width: .9; }
+.me-figure .me-torso   { fill: #2f8f4e; stroke: #0f3d24; stroke-width: .9; }
+.me-figure .me-strap   { stroke: #6b4423; stroke-width: 1.6; stroke-linecap: round; }
+.me-figure .me-belt    { stroke: #6b4423; stroke-width: 1.8; }
+.me-figure .me-pack    { fill: #9a6634; stroke: #5c3a1e; stroke-width: .9; }
+.me-figure .me-pocket  { fill: #b57d43; stroke: #5c3a1e; stroke-width: .6; }
+.me-figure .me-bedroll { fill: #c0392b; stroke: #7a2318; stroke-width: .8; }
+.me-figure .me-scarf   { fill: #e8b33c; stroke: #a5761a; stroke-width: .6; }
+.me-figure .me-pants   { stroke: #34493c; stroke-width: 4; stroke-linecap: round; fill: none; }
+.me-figure .me-leg-back .me-pants { stroke: #26372d; }
+.me-figure .me-boot    { fill: #5c3a1e; }
+.me-figure .me-arm,
+.me-figure .me-sleeve  { stroke: #2f8f4e; stroke-width: 3.4; stroke-linecap: round; fill: none; }
+.me-figure .me-arm-back { stroke: #1f6b3a; }
+.me-figure .me-hand    { fill: #f6cfa8; stroke: #8a5a3a; stroke-width: .6; }
+.me-figure .me-stick   { stroke: #7a4f1d; stroke-width: 2.2; stroke-linecap: round; }
+.me-figure .me-knob    { fill: #5fae5a; }
+
+/* Pivot points in SVG user units: hips ~(24.5,43), shoulders ~(25.5,31.5), neck (22.5,29.5). */
+.me-figure .me-leg       { transform-box: view-box; transform-origin: 24.5px 43px; }
+.me-figure .me-arm       { transform-box: view-box; transform-origin: 25.5px 31.5px; }
+.me-figure .me-arm-front { transform-origin: 28px 32px; }
+.me-figure .me-scarf     { transform-box: view-box; transform-origin: 22.5px 29.5px; }
+.me-figure .me-bob {
+	transform-box: view-box; transform-origin: 24px 57px;
+	animation: me-breathe 3.4s ease-in-out infinite;
+}
+
+.me-marker.is-walking .me-leg-front { animation: me-swing .55s ease-in-out infinite alternate; }
+.me-marker.is-walking .me-leg-back  { animation: me-swing .55s ease-in-out infinite alternate-reverse; }
+.me-marker.is-walking .me-arm-front { animation: me-swing-arm .55s ease-in-out infinite alternate-reverse; }
+.me-marker.is-walking .me-arm-back  { animation: me-swing-arm .55s ease-in-out infinite alternate; }
+.me-marker.is-walking .me-scarf     { animation: me-flutter .28s ease-in-out infinite alternate; }
+.me-marker.is-walking .me-bob       { animation: me-hop .275s ease-in-out infinite alternate; }
+
+/* -- leaves kicked up behind the boots while walking ----------------------- */
+.me-fx { left: 8px; top: 60px; width: 48px; height: 16px; }
+.me-leaf {
+	position: absolute; left: 18px; top: 6px; width: 7px; height: 4px;
+	border-radius: 0 80% 0 80%;
+	background: #6fb35a;
+	opacity: 0;
+}
+.me-leaf:nth-child(2) { background: #c99a3b; }
+.me-leaf:nth-child(3) { background: #3f7f45; }
+.me-marker.is-walking .me-leaf { animation: me-kick 1.1s ease-out infinite; }
+.me-marker.is-walking .me-leaf:nth-child(2) { animation-delay: .37s; }
+.me-marker.is-walking .me-leaf:nth-child(3) { animation-delay: .74s; }
+
+/* -- gold player arrow over the head -------------------------------------- */
+.me-arrow {
+	left: 25px; top: 0; width: 14px; height: 11px;
+	background: linear-gradient(180deg, #ffe08a, #e5a634);
+	clip-path: polygon(0 0, 100% 0, 50% 100%);
+	filter: drop-shadow(0 0 3px rgba(255, 214, 102, .9));
+	animation: me-arrow 1.2s ease-in-out infinite alternate;
+}
+
+/* -- "deep breath" bubble while resting ---------------------------------- */
+.me-emote {
+	left: 42px; top: 6px;
+	padding: 2px 5px;
+	border-radius: 10px 10px 10px 2px;
+	background: #fffdf7;
+	box-shadow: 0 2px 6px rgba(10, 31, 20, .3);
+	font-size: 12px; line-height: 1.2;
+	opacity: 0;
+	transform: translateY(6px) scale(.6);
+	transform-origin: 0 100%;
+}
+.me-marker.is-resting .me-emote { animation: me-breath-bubble 4s ease-in-out 1.2s infinite; }
+
+/* -- footprints left behind (MapComponent.dropFootprint) ------------------- */
+.me-step { pointer-events: none; }
+.me-step span {
+	position: absolute; inset: 0;
+	animation: me-step-fade 9s linear forwards;
+}
+.me-step i {
+	position: absolute; top: 4px; width: 4px; height: 7px;
+	border-radius: 50% 50% 45% 45%;
+	background: rgba(92, 58, 30, .55);
+}
+.me-step i:first-child { left: 3px; top: 6px; }
+.me-step i:last-child  { left: 9px; top: 2px; }
+
+@keyframes me-rune       { from { transform: scaleY(.45) rotate(0deg); } to { transform: scaleY(.45) rotate(360deg); } }
+@keyframes me-swing      { from { transform: rotate(-30deg); } to { transform: rotate(30deg); } }
+@keyframes me-swing-arm  { from { transform: rotate(-28deg); } to { transform: rotate(24deg); } }
+@keyframes me-flutter    { from { transform: rotate(-4deg); } to { transform: rotate(14deg); } }
+@keyframes me-hop        { from { transform: translateY(0); } to { transform: translateY(-2.2px); } }
+@keyframes me-breathe    { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.03); } }
+@keyframes me-arrow      { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+@keyframes me-kick {
+	0%   { opacity: 0; transform: translate(0, 0) rotate(0); }
+	20%  { opacity: 1; }
+	100% { opacity: 0; transform: translate(-16px, -12px) rotate(-220deg); }
+}
+@keyframes me-breath-bubble {
+	0%, 100% { opacity: 0; transform: translateY(6px) scale(.6); }
+	20%, 70% { opacity: 1; transform: translateY(0) scale(1); }
+	85%      { opacity: 0; transform: translateY(-6px) scale(1); }
+}
+@keyframes me-step-fade { 0% { opacity: 1; } 70% { opacity: .7; } 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+	.me-marker { transition: none; }
+	.me-leaf, .me-emote { display: none; }
+}
+
+/* ===================================================================
+   Performance switches (PerformanceModeService, MapComponent)
+   =================================================================== */
+
+/* Dragging / pinching the map: freeze every decorative animation so all of the frame
+   budget goes to moving tiles. The picture stays; only the motion waits. */
+html.map-moving .me-marker *,
+html.map-moving .me-step span,
+html.map-moving app-forest-backdrop * {
+	animation-play-state: paused !important;
+}
+
+/* Lite mode keeps the explorer and the forest on screen; it drops only the costly extras. */
+html.lite .me-figure { filter: drop-shadow(0 0 1px #fff); }
+html.lite .me-ring i { animation: none; }
+html.lite .me-leaf,
+html.lite .me-emote,
+html.lite .me-step { display: none; }
+html.lite .me-marker .me-bob { animation: none; }
+html.lite .brand-mark svg,
+html.lite .sidebar-forest .t,
+html.lite .start-btn::after { animation: none !important; }

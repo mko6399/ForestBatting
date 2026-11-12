@@ -99,11 +99,24 @@
   box-shadow: var(--shadow-rest);
 }
 
+/* Space is reserved from the poster's own width/height, and the 20px preview fills it,
+   blurred by the browser's upscaling, until the real image has loaded. The page never
+   jumps, and on a weak signal the shape of the trail map is there immediately. */
+.trail-map {
+  aspect-ratio: 941 / 1672;
+  background-size: cover;
+  background-position: center;
+}
+
 .trail-poster {
   width: 100%;
   height: auto;
   display: block;
+  opacity: 0;
+  transition: opacity var(--t-slow) var(--ease-settle);
 }
+
+.trail-poster.loaded { opacity: 1; }
 
 /* ---- start area ----------------------------------------------------- */
 
@@ -460,4 +473,71 @@
   margin: 12px 12px 10px 12px;
   color: #b91c1c;
   font-weight: 800;
+}
+
+/* ---- start area: brief, consent, optional links ------------------------ */
+
+.start-brief {
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--c-ink);
+  }
+
+  span {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--c-morning);
+    font-size: 14px;
+  }
+}
+
+.consent-line {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--c-stone);
+  text-align: center;
+
+  button {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--c-stone);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.start-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+
+  button {
+    min-height: 44px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--c-line);
+    background: var(--c-mist);
+    color: var(--c-forest);
+    font: 500 13px/1.3 var(--f-head);
+    cursor: pointer;
+  }
 }

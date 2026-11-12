@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, ChangeDetectorRef, NgZone, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
@@ -350,6 +350,7 @@ export class SideNavComponent implements OnInit, OnDestroy {
   isCertificateEnabled = false;
   certificateOnly = false;
   private refreshInterval: any;
+  private zone = inject(NgZone);
 
   constructor(
     private nav: NavigationService,
@@ -397,7 +398,7 @@ export class SideNavComponent implements OnInit, OnDestroy {
       const currentId = this.nav.getCurrentCheckpointId();
       if (!currentId) return false;
 
-      const missions = this.storage.getMissions();
+      const missions = this.storage.getMissionsSnapshot() as any[];
       const currentMission = missions.find((m: any) => m.id === currentId);
 
       // Show badge only if mission exists and is NOT reached
@@ -412,11 +413,18 @@ export class SideNavComponent implements OnInit, OnDestroy {
     // Listen to storage changes (other tabs or services)
     if (typeof window !== 'undefined') {
       window.addEventListener('storage', () => this.refreshState());
-      // Refresh state every second to catch mission completion
-      this.refreshInterval = setInterval(() => {
-        this.refreshState();
-        this.cdr.detectChanges();
-      }, 1000);
+      // Poll once a second to catch mission completion — outside Angular's zone, so the timer
+      // no longer triggers a whole-app change detection every second; this menu is redrawn
+      // only when one of its three flags actually changed.
+      this.zone.runOutsideAngular(() => {
+        this.refreshInterval = setInterval(() => {
+          const before = `${this.isMissionsEnabled}|${this.isCertificateEnabled}|${this.certificateOnly}`;
+          this.refreshState();
+          if (before !== `${this.isMissionsEnabled}|${this.isCertificateEnabled}|${this.certificateOnly}`) {
+            this.zone.run(() => this.cdr.detectChanges());
+          }
+        }, 1000);
+      });
     }
   }
 
@@ -438,7 +446,7 @@ export class SideNavComponent implements OnInit, OnDestroy {
       this.certificateOnly = this.storage.getCertificateOnlyMode();
       const val = this.storage.getInRadius();
       this.isMissionsEnabled = val ? JSON.parse(val) : false;
-      const missions = this.storage.getMissions();
+      const missions = this.storage.getMissionsSnapshot() as any[];
       this.isCertificateEnabled = Array.isArray(missions) && missions.length > 0 && missions.every((m: any) => m.reached);
     } catch {
       this.isMissionsEnabled = false;

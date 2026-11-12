@@ -15,18 +15,17 @@
 
     <p class="error" *ngIf="loadError()">{{ loadError() }}</p>
 
-    <div class="trail-map u-rise" style="animation-delay:120ms" aria-label="Trail infographic">
-      <img
-        class="trail-poster"
-        [src]="posterSrc()"
-        alt="Forest Bathing Trail poster"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
 
     <div class="start-area u-rise" style="animation-delay:200ms">
       <p class="stop-warning" *ngIf="isTracking()" role="note">{{ t().home.stopWarning }}</p>
+
+      <!-- What used to be three popups (tutorial, location primer, consent) is now read here,
+           so the only taps left are Start and the phone's own "Allow". -->
+      <ul class="start-brief" *ngIf="!isTracking()">
+        <li><span aria-hidden="true">📍</span>{{ currentLang() === 'th' ? 'กด "อนุญาต" เมื่อถูกถามตำแหน่ง — ใช้เปิดภารกิจเมื่อถึงแต่ละฐาน' : 'Tap "Allow" when asked for location — it opens each checkpoint\'s mission' }}</li>
+        <li><span aria-hidden="true">🔆</span>{{ currentLang() === 'th' ? 'เปิดหน้าจอค้างไว้ระหว่างเดิน' : 'Keep the screen on while walking' }}</li>
+        <li><span aria-hidden="true">❓</span>{{ currentLang() === 'th' ? 'ติดภารกิจไหน กดปุ่ม ? ในภารกิจนั้นได้เลย' : 'Stuck on a mission? Tap its ? button' }}</li>
+      </ul>
       <button
         class="start-btn"
         type="button"
@@ -37,6 +36,18 @@
       >
         {{ isTracking() ? t().home.stop : t().home.goToStart }}
       </button>
+
+      <p class="consent-line" *ngIf="!isTracking() && needsConsent()">
+        {{ currentLang() === 'th'
+          ? 'การกดเริ่มต้น ถือว่ายินยอมให้เก็บความคืบหน้าไว้ในเครื่องนี้และใช้ตำแหน่งระหว่างเดิน'
+          : 'By tapping Start you agree to keep your progress on this phone and to use your location during the walk.' }}
+        <button type="button" (click)="declineStorage()">{{ currentLang() === 'th' ? 'ไม่ยินยอมให้เก็บข้อมูล' : 'Don\'t store my data' }}</button>
+      </p>
+
+      <div class="start-links" *ngIf="!isTracking()">
+        <button type="button" (click)="openPreWalkQuestionnaire()">📝 {{ currentLang() === 'th' ? 'แบบประเมินก่อนเดิน (ไม่บังคับ)' : 'Pre-walk check-in (optional)' }}</button>
+        <button type="button" (click)="openDeviceCheck()">🩺 {{ currentLang() === 'th' ? 'ตรวจความพร้อมเครื่อง' : 'Check this phone' }}</button>
+      </div>
 
       <p class="visitor-count" *ngIf="visitorCount() !== null" role="status">
         👥 {{ visitorCount() }} {{ currentLang() === 'th' ? 'ผู้มาเยือน' : 'visitors' }}
@@ -53,6 +64,21 @@
       <p class="test-email-status" *ngIf="testEmailStatus() === 'sent' || testEmailStatus() === 'failed'" role="status">
         {{ testEmailStatus() === 'sent' ? 'Test email sent ✓' : 'Test email failed ✗' }}
       </p> -->
+    </div>
+
+    <div class="trail-map u-rise" style="animation-delay:120ms" aria-label="Trail infographic"
+         [style.background-image]="'url(' + posterPreview() + ')'">
+      <img
+        class="trail-poster"
+        [class.loaded]="posterLoaded()"
+        [src]="posterSrc()"
+        (load)="posterLoaded.set(true)"
+        alt="Forest Bathing Trail poster"
+        width="941"
+        height="1672"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
 
     <div class="evaluation-overlay" *ngIf="showPostUseEvaluation()">

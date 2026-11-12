@@ -20,7 +20,9 @@ import { ActivatedRoute } from '@angular/router';
         </a>
 
         <ng-template #iosAction>
-          <button class="primary-action" type="button" (click)="copyLink()">
+          <!-- iOS 17+ opens Safari for x-safari-https:// links, even from inside LINE / Facebook. -->
+          <a class="primary-action" [href]="safariLink()">Open in Safari</a>
+          <button class="primary-action secondary-action" type="button" (click)="copyLink()">
             Copy link for Safari
           </button>
         </ng-template>
@@ -90,6 +92,7 @@ import { ActivatedRoute } from '@angular/router';
       cursor: pointer;
     }
 
+    .secondary-action { margin-top: 10px; color: #f7f4e8 !important; background: transparent !important; border: 2px solid rgba(247, 244, 232, .6) !important; }
     .hint { margin: 20px 0 0; color: #d5dfca; font-size: .92rem; line-height: 1.5; }
   `]
 })
@@ -111,6 +114,7 @@ export class OpenBrowserComponent {
   });
   readonly destination = this.getDestination();
   readonly browserLink = computed(() => this.isAndroid() ? this.androidChromeLink() : this.destination);
+  readonly safariLink = computed(() => this.destination.replace(/^https:\/\//, 'x-safari-https://'));
 
   async copyLink(): Promise<void> {
     if (!this.browser) return;

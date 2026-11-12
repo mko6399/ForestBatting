@@ -3,9 +3,11 @@ import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { CommonModule } from '@angular/common';
-import { LanguageSelectorComponent } from './components/language-selector/language-selector.component';
 import { ConsentBannerComponent } from './components/consent-banner/consent-banner.component';
 import { ForestBackdropComponent } from './components/forest-backdrop/forest-backdrop.component';
+import { DeviceHelpSheetComponent } from './components/device-help-sheet/device-help-sheet.component';
+import { DeviceCheckService } from './services/device-check.service';
+import { PerformanceModeService } from './services/performance-mode.service';
 import { LanguageService } from './services/language.service';
 import { StorageService } from './services/storage.service';
 import { LocationTrackingService } from './services/location-tracking.service';
@@ -17,15 +19,11 @@ import { filter, startWith, map } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SideNavComponent, CommonModule, LanguageSelectorComponent, ConsentBannerComponent, ForestBackdropComponent],
+  imports: [RouterOutlet, SideNavComponent, CommonModule, ConsentBannerComponent, ForestBackdropComponent, DeviceHelpSheetComponent],
   template: `
     <!-- The living forest sits behind every route, shell or standalone. -->
-    <app-forest-backdrop [calm]="!isStandaloneRoute()" />
-
-    <app-language-selector
-      *ngIf="showLanguageSelector()"
-      (languageSelected)="onLanguageSelected()"
-    ></app-language-selector>
+    <!-- Paused (picture kept, motion stopped) where the map covers it. -->
+    <app-forest-backdrop [calm]="!isStandaloneRoute()" [paused]="onMap()" />
 
     <div class="evaluation-overlay" *ngIf="showPreUseEvaluation()">
       <section class="evaluation-modal" role="dialog" aria-modal="true" [attr.aria-label]="t.common.preUseEvaluationTitle">
@@ -108,7 +106,10 @@ import { filter, startWith, map } from 'rxjs/operators';
       Held back while the language picker is up, so the consent text is read in the language
       the visitor actually chose rather than whatever the app defaulted to.
     -->
-    <app-consent-banner *ngIf="!showLanguageSelector()" />
+    <app-consent-banner *ngIf="!showLanguageSelector() && !onHome()" />
+
+    <!-- Explains any device / permission problem (GPS, storage, in-app browser...). -->
+    @defer (on idle) { <app-device-help-sheet /> }
   `,
   styleUrl: './app.component.scss'
 })
@@ -129,6 +130,9 @@ export class AppComponent {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private appUpdate = inject(AppUpdateService);
+  private device = inject(DeviceCheckService);
+  /** Instantiated here so lite mode is decided before the first screen settles. */
+  private perf = inject(PerformanceModeService);
 
   isStandaloneRoute = computed(() => {
     const url = this.currentUrl();
@@ -147,6 +151,18 @@ export class AppComponent {
       url.startsWith('/certificate?preview=1&') ||
       url.includes('/certificate?') && url.includes('preview=1')
     );
+  });
+
+  /** Home asks for consent on its Start button, so the separate banner would only cost a tap. */
+  onHome = computed(() => {
+    const url = this.currentUrl();
+    return url === '/home' || url.startsWith('/home?');
+  });
+
+  /** The map fills the screen; the backdrop behind it can stop animating. */
+  onMap = computed(() => {
+    const url = this.currentUrl();
+    return url === '/map' || url.startsWith('/map?');
   });
 
   hideBottomNav = computed(() => {
@@ -194,10 +210,25 @@ export class AppComponent {
       )
       .subscribe((url) => this.currentUrl.set(url));
 
-    // First visit (or right after Finish wiped localStorage): show the language selector
-    // first; the pre-trail questionnaire prompt appears once a language is chosen.
+    // First visit: no language picker. LanguageService has already chosen Thai or English from
+    // the phone's own language; the EN / ไทย switch in the top bar changes it in one tap.
+    // (The picker and the pre-walk questionnaire prompt used to cost three taps before anything
+    // else; the questionnaire is now an optional link next to the Start button.)
     if (this.isBrowser && this.languageService.isFirstVisit()) {
-      this.showLanguageSelector.set(true);
+      this.languageService.setLanguage(this.languageService.getCurrentLanguageCode());
+    }
+
+    // Problems that make the trail unusable are named up front, before the visitor walks off.
+    // In-app browsers (LINE/Facebook) are the common one in Thailand: the QR is often scanned
+    // from LINE, whose web view loses the walk on close. index.html already bounces LINE out;
+    // this catches the rest.
+    if (this.isBrowser) {
+      setTimeout(() => {
+        if (this.currentUrl().startsWith('/open')) return; // that page is the in-app hand-off itself
+        if (this.device.env.inApp) this.device.show('in-app-browser');
+        else if (!this.device.storageWritable()) this.device.show('storage-blocked');
+        else if (this.device.env.platform === 'ios' && this.device.env.standalone) this.device.showOnce('ios-standalone-storage');
+      }, 1200);
     }
   }
 
@@ -210,7 +241,7 @@ export class AppComponent {
       const inRadius = this.storage.getInRadius() ? JSON.parse(this.storage.getInRadius()!) : false;
 
       if (inRadius) {
-        const missions = this.storage.getMissions();
+        const missions = this.storage.getMissionsSnapshot() as any[];
         const currentIdStr = this.storage.getCurrentCheckpointId();
         const currentId = currentIdStr ? Number(currentIdStr) : null;
 
@@ -223,7 +254,7 @@ export class AppComponent {
       }
 
       // Check if certificate is available
-      const missions = this.storage.getMissions();
+      const missions = this.storage.getMissionsSnapshot() as any[];
       const allComplete = Array.isArray(missions) && missions.length > 0 && missions.every((m: any) => m.reached);
       return allComplete; // Has certificate ready
     } catch {

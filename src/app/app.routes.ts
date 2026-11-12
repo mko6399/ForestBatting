@@ -35,10 +35,14 @@ export const routes: Routes = [
       .then(m => m.InstallDesktopComponent)
   },
   {
+    /*
+      Walking the trail needs no account: QR → Start → Allow location → walking.
+      Signing in moved to the end, where it is actually needed (name on the certificate,
+      address to email it to) — see AuthGuard on the certificate routes below.
+    */
     path: 'home',
     loadComponent: () => import('./pages/home/home.component')
       .then(m => m.HomeComponent),
-    canActivate: [AuthGuard]
   },
   {
     path: 'login',
@@ -50,12 +54,10 @@ export const routes: Routes = [
     path: 'mobile',
     loadComponent: () => import('./pages/mobile-page/mobile-page.component')
       .then(m => m.MobilePageComponent),
-    canActivate: [AuthGuard]
   },
   {
     path: 'map',
     component: MapComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'missions',
@@ -67,7 +69,7 @@ export const routes: Routes = [
       inside .then() instead runs it outside the injection context, so its inject() calls throw
       NG0203. Both guard files are under 1.2kB — there was nothing to gain from lazy loading.
     */
-    canActivate: [AuthGuard, inRadiusGuard],
+    canActivate: [inRadiusGuard],
   },
   {
     path: 'certificate-summary',
@@ -88,6 +90,15 @@ export const routes: Routes = [
     path: 'visitor-dashboard',
     loadComponent: () => import('./pages/visitor-dashboard/visitor-dashboard.component')
       .then(m => m.VisitorDashboardComponent)
+  },
+  {
+    /*
+      Device readiness check: browser, GPS, storage, screen wake lock, install. Open to everyone
+      (no login) so staff at the entrance can run it on a visitor's phone.
+    */
+    path: 'check',
+    loadComponent: () => import('./pages/device-check/device-check.component')
+      .then(m => m.DeviceCheckComponent)
   },
   {
     path: 'gallery',

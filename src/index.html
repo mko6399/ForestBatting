@@ -7,8 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/jpeg" href="assets/images/webapp-icon.jpg">
   <!-- Leaflet is served from our own origin so the map still works with no signal.
-       Its stylesheet comes in through styles.scss, so only the script is needed here. -->
-  <script src="vendor/leaflet/leaflet.js"></script>
+       Its stylesheet comes in through styles.scss, so only the script is needed here.
+       defer: it no longer blocks the first paint (~150 kB). Deferred classic scripts and the
+       app's module scripts run in document order, so L is still defined before main.js. -->
+  <script src="vendor/leaflet/leaflet.js" defer></script>
   <link rel="manifest" href="manifest.webmanifest">
 
   <!-- iOS PWA Support -->
@@ -24,10 +26,70 @@
        the service worker caches them after the first visit (see ngsw-config.json). -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=Prompt:wght@500;600;700&display=swap">
+  <!-- Loaded without blocking: on a weak signal the page paints at once in the phone's own
+       font and swaps to these when they arrive (media="print" → "all" trick). -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=Prompt:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=Prompt:wght@500;600;700&display=swap"></noscript>
+
+  <!-- Splash shown until Angular replaces <app-root>'s contents. Without it a slow network or
+       a slow API (the version check waits up to 5 s) meant a plain white screen. -->
+  <style>
+    .boot { position: fixed; inset: 0; display: grid; place-items: center; align-content: center; gap: 14px;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #14532d; text-align: center;
+      background: radial-gradient(120% 70% at 80% -10%, rgba(253,236,170,.55), transparent 60%),
+                  linear-gradient(180deg, #e9f2e1 0%, #f3f2e3 45%, #d5e5c8 100%); }
+    .boot-mark { width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font-size: 32px;
+      background: linear-gradient(135deg, #f3cc62, #e5a634); box-shadow: 0 8px 24px rgba(15,61,36,.25);
+      animation: boot-sway 2.4s ease-in-out infinite alternate; }
+    .boot p { margin: 0; font-size: 15px; font-weight: 600; }
+    .boot small { font-size: 13px; color: #3d5145; }
+    .boot-trees { position: absolute; left: 0; right: 0; bottom: 0; height: 22vh; opacity: .35;
+      background: linear-gradient(180deg, transparent, #4f8d55); clip-path: polygon(0 60%, 8% 20%, 16% 60%, 24% 30%, 32% 65%, 42% 15%, 52% 62%, 62% 28%, 72% 64%, 82% 22%, 92% 58%, 100% 35%, 100% 100%, 0 100%); }
+    @keyframes boot-sway { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+    @media (prefers-reduced-motion: reduce) { .boot-mark { animation: none; } }
+  </style>
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div class="boot" role="status">
+      <div class="boot-mark" aria-hidden="true">🌿</div>
+      <p>กำลังเตรียมเส้นทางอาบป่า…</p>
+      <small>Preparing your forest trail…</small>
+      <div class="boot-trees" aria-hidden="true"></div>
+    </div>
+  </app-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
+
+  <!--
+    Runs before the app bundle, in plain ES5 on purpose: it has to work on phones too old to
+    parse the bundle at all.
+    1. LINE's in-app browser: QR codes in Thailand are very often scanned from inside LINE,
+       whose web view blocks GPS prompts and loses the walk when closed. LINE documents
+       ?openExternalBrowser=1 to hand the page to Safari / Chrome, so do that automatically.
+    2. iOS 12–14: Angular 22 cannot target them (see HANDOVER 4.3), so the bundle fails with
+       a syntax error and the visitor sees a blank page. Say what is wrong instead.
+  -->
+  <script>
+    (function () {
+      var ua = navigator.userAgent || '';
+      try {
+        if (/Line\//i.test(ua) && location.search.indexOf('openExternalBrowser=1') === -1) {
+          location.replace(location.href + (location.search ? '&' : '?') + 'openExternalBrowser=1');
+          return;
+        }
+      } catch (e) { /* stay on the page; the app shows its own in-app-browser help */ }
+
+      var m = ua.match(/iP(hone|od|ad).*OS (\d+)_/);
+      if (m && parseInt(m[2], 10) < 15) {
+        var th = (navigator.language || '').toLowerCase().indexOf('th') === 0;
+        var box = document.createElement('div');
+        box.setAttribute('style', 'font-family:-apple-system,sans-serif;max-width:420px;margin:15vh auto;padding:28px 22px;border-radius:20px;background:#fffdf7;color:#13241a;text-align:center;box-shadow:0 10px 40px rgba(15,61,36,.2);border-top:6px solid #b42318');
+        box.innerHTML = th
+          ? '<div style="font-size:40px">📱</div><h2 style="color:#14532d">กรุณาอัปเดต iOS</h2><p style="line-height:1.6">เส้นทางอาบป่าต้องใช้ iOS 15 ขึ้นไป เครื่องนี้ใช้ iOS ' + m[2] + '</p><p style="line-height:1.6">ไปที่ การตั้งค่า › ทั่วไป › รายการอัปเดตซอฟต์แวร์<br>หรือขอยืมเครื่องจากเจ้าหน้าที่</p>'
+          : '<div style="font-size:40px">📱</div><h2 style="color:#14532d">Please update iOS</h2><p style="line-height:1.6">The trail needs iOS 15 or later. This iPhone is on iOS ' + m[2] + '.</p><p style="line-height:1.6">Go to Settings › General › Software Update,<br>or ask a staff member for a loan device.</p>';
+        document.body.appendChild(box);
+      }
+    })();
+  </script>
 </body>
 </html>

@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 import { ConsentService } from './consent.service';
 import { SiteService } from './site.service';
+import { DeviceCheckService } from './device-check.service';
 
 /**
  * Keys that belong to the person rather than to a trail, so they survive switching location
@@ -57,6 +58,7 @@ export class StorageService {
   private platformId = inject(PLATFORM_ID);
   private site = inject(SiteService);
   private consent = inject(ConsentService);
+  private device = inject(DeviceCheckService);
 
   /**
    * Stand-in for localStorage used until the visitor agrees to on-device storage, and for the
@@ -162,6 +164,11 @@ export class StorageService {
       localStorage.setItem(scoped, value);
     } catch (e) {
       console.error(`Error setting item in localStorage: ${key}`, e);
+      // Used to fail silently, so a full quota quietly dropped mission photos and progress.
+      // Quota → the space is full; anything else → the browser refuses storage outright.
+      const name = (e as { name?: string })?.name;
+      this.device.showOnce(name === 'QuotaExceededError' || name === 'NS_ERROR_DOM_QUOTA_REACHED'
+        ? 'storage-full' : 'storage-blocked');
     }
   }
 
@@ -288,6 +295,31 @@ export class StorageService {
 
   getMissions(): any[] {
     return this.getObject('missions') || [];
+  }
+
+  private missionsRaw: string | null = null;
+  private missionsParsed: readonly any[] = [];
+
+  /**
+   * Read-only view of the missions, parsed only when the stored text actually changed.
+   *
+   * The missions record carries the mission photos as base64 and reaches several MB during a
+   * walk. The menu and Home used to JSON.parse all of it on every change-detection pass and
+   * every second — ~2 ms per parse on a desktop, 8–12 ms on a phone, several times per GPS
+   * fix and per touch event while dragging the map. Comparing the raw string is far cheaper.
+   * Callers must not mutate the result; use getMissions() for a private copy.
+   */
+  getMissionsSnapshot(): readonly any[] {
+    const raw = this.getItem('missions');
+    if (raw === this.missionsRaw) return this.missionsParsed;
+    this.missionsRaw = raw;
+    try {
+      const parsed = raw ? JSON.parse(raw) : [];
+      this.missionsParsed = Array.isArray(parsed) ? parsed : [];
+    } catch {
+      this.missionsParsed = [];
+    }
+    return this.missionsParsed;
   }
 
   setMissions(missions: any[]): void {

@@ -1,8 +1,10 @@
 <div class="login-container">
   <div class="login-card">
     <div class="login-header">
-      <h1>{{ t.login.title }}</h1>
-      <p>{{ t.login.subtitle }}</p>
+      <h1>{{ forCertificate ? (currentLang === 'th' ? 'รับเกียรติบัตรของคุณ' : 'Get your certificate') : t.login.title }}</h1>
+      <p>{{ forCertificate
+        ? (currentLang === 'th' ? 'เดินครบแล้ว! กรอกชื่อสำหรับพิมพ์บนเกียรติบัตร และอีเมลที่จะส่งไปให้' : 'You made it! Enter the name for your certificate and the email to send it to.')
+        : t.login.subtitle }}</p>
     </div>
 
     <form (ngSubmit)="onSubmit()" class="login-form" *ngIf="!codeSent">
@@ -71,7 +73,8 @@
           name="code"
           inputmode="numeric"
           maxlength="6"
-          [(ngModel)]="code"
+          [ngModel]="code"
+          (ngModelChange)="onCodeChange($event)"
           [placeholder]="t.login.codePlaceholder"
           required
           autocomplete="one-time-code"

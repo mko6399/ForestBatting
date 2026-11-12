@@ -25,8 +25,9 @@ export class AuthGuard implements CanActivate {
       // User has token - allow access
       return true;
     } else {
-      // No token - redirect to login
-      this.router.navigate(['/login']);
+      // No token - sign in, then come straight back to the page that was asked for.
+      // Only the certificate pages are guarded now: walking the trail needs no account.
+      this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
       return false;
     }
   }

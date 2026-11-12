@@ -1,5 +1,6 @@
 import { Injectable, PLATFORM_ID, WritableSignal, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { DeviceCheckService } from './device-check.service';
 
 export interface TrackedPoint {
   lat: number;
@@ -39,6 +40,8 @@ const MAX_STORED_POINTS = 20_000;
 export class LocationTrackingService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
+  /** Turns raw geolocation failures into a named cause and shows the visitor how to fix it. */
+  private readonly device = inject(DeviceCheckService);
 
   private watchId: number | null = null;
 
@@ -73,6 +76,12 @@ export class LocationTrackingService {
     if (!this.isBrowser) return;
 
     this._points.set(this.readPoints());
+
+    // The help sheet's "Try again" restarts the watch from that tap, so a fresh prompt can show.
+    this.device.retryLocation = () => {
+      this.stop();
+      this.start();
+    };
 
     if (!('geolocation' in navigator)) {
       this._permission.set('unsupported');
@@ -110,6 +119,7 @@ export class LocationTrackingService {
     if (!('geolocation' in navigator)) {
       this._error.set('Geolocation is not supported in this browser.');
       this._permission.set('unsupported');
+      this.device.show('geo-unsupported');
       this._isTracking.set(false);
       this.writeActive(false);
       return;
@@ -125,6 +135,8 @@ export class LocationTrackingService {
     this._error.set(null);
     this._isTracking.set(true);
     this.writeActive(true);
+    // Keep the screen awake: iOS and Android both stop feeding positions to a hidden page.
+    this.device.setTracking(true);
 
     // Set flag that we're waiting for the first location fix
     this._isWaitingForFirstFix.set(true);
@@ -154,6 +166,7 @@ export class LocationTrackingService {
       (err) => {
         const errorMsg = err?.message || 'Failed to get location.';
         this._error.set(errorMsg);
+        this.device.reportGeoError(err?.code);
 
         // Log error details for debugging
         if (err?.code === err.PERMISSION_DENIED) {
@@ -188,6 +201,7 @@ export class LocationTrackingService {
     this._isTracking.set(false);
     this._isWaitingForFirstFix.set(false);
     this.writeActive(false);
+    this.device.setTracking(false);
     this.flushPoints();
   }
 
@@ -270,6 +284,7 @@ export class LocationTrackingService {
     };
 
     this.hasLiveFix = true;
+    this.device.reportFix(c.accuracy);
     this._points.set([...this._points(), next]);
     this._isWaitingForFirstFix.set(false);
 
@@ -364,5 +379,6 @@ export class LocationTrackingService {
 
     this._storageFull.set(true);
     console.warn('⚠️ Could not persist the GPS track: device storage is full.');
+    this.device.showOnce('storage-full');
   }
 }

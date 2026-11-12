@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from '../../services/language.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -27,11 +27,29 @@ export class LoginComponent {
   codeSubmittedOnce: boolean = false;
   emptyFields: Set<string> = new Set();
 
+  /** Where to go after signing in; set when a certificate page sent the visitor here. */
+  readonly returnUrl: string | null;
+
   constructor(
+    route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
     public languageService: LanguageService
-  ) { }
+  ) {
+    const r = route.snapshot.queryParamMap.get('returnUrl');
+    this.returnUrl = r && r.startsWith('/') && !r.startsWith('//') ? r : null;
+  }
+
+  /** Signing in now only happens at the end of the walk, to receive the certificate. */
+  get forCertificate(): boolean {
+    return this.returnUrl !== null;
+  }
+
+  /** Six digits typed or autofilled from Mail/Messages: verify straight away, no extra tap. */
+  onCodeChange(value: string): void {
+    this.code = (value || '').replace(/\D/g, '').slice(0, 6);
+    if (this.code.length === 6 && !this.isVerifying) this.onVerifyCode();
+  }
 
   get t() {
     return this.languageService.t();
@@ -152,8 +170,8 @@ export class LoginComponent {
           this.authService.storeUsername(userName);
         }
 
-        // Navigate directly after login (no popup)
-        this.router.navigate(['/home']);
+        // Straight back to where they were heading (the certificate), no popup.
+        this.router.navigateByUrl(this.returnUrl ?? '/home');
       },
       (error: any) => {
         this.isVerifying = false;

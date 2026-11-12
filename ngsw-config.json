@@ -54,6 +54,21 @@
         "maxSize": 30,
         "maxAge": "365d"
       }
+    },
+    {
+      "name": "map-tiles",
+      "urls": [
+        "https://*.tile.openstreetmap.org/**",
+        "https://tile.openstreetmap.org/**",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 1500,
+        "maxAge": "7d",
+        "timeout": "4s",
+        "cacheOpaqueResponses": false
+      }
     }
   ]
 }
